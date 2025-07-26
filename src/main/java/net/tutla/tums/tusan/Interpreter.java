@@ -1,13 +1,11 @@
 package net.tutla.tums.tusan;
 
-import net.tutla.tums.tusan.Lexer;
-
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
 
 public class Interpreter {
     public Object data;
