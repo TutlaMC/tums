@@ -1,4 +1,4 @@
-package net.tutla.tums.tusan;
+package net.tutla.tums.tusan.lexer;
 
 public enum TokenType {
 

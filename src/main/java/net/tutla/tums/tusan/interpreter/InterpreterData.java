@@ -1,4 +1,6 @@
-package net.tutla.tums.tusan;
+package net.tutla.tums.tusan.interpreter;
+
+import net.tutla.tums.tusan.Variable;
 
 import java.util.HashMap;
 import java.util.List;

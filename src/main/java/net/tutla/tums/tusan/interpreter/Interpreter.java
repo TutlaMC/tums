@@ -1,10 +1,19 @@
-package net.tutla.tums.tusan;
+package net.tutla.tums.tusan.interpreter;
 
+<<<<<<< Updated upstream
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+=======
+import net.tutla.tums.tusan.lexer.Lexer;
+import net.tutla.tums.tusan.lexer.Token;
+
+import java.util.HashMap;
+import java.util.List;
+import java.io.*;
+>>>>>>> Stashed changes
 
 public class Interpreter {
 

@@ -1,4 +1,6 @@
-package net.tutla.tums.tusan;
+package net.tutla.tums.tusan.lexer;
+
+import net.tutla.tums.tusan.interpreter.Interpreter;
 
 import java.util.ArrayList;
 import java.util.List;
