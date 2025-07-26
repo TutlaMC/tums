@@ -5,7 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 public class TumsClient implements ClientModInitializer {
 
     @Override
-    public void onInitializeClient() {
-
+    public void onInitializeClient(){
+        System.out.println("weeeb");
     }
 }
