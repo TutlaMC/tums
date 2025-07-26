@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tums.client.iml" filepath="$PROJECT_DIR$/.idea/modules/tums.client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tums.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tums.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tums.test.iml" filepath="$PROJECT_DIR$/.idea/modules/tums.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tums.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Tums.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tums.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Tums.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tums.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Tums.test.iml" />
     </modules>
   </component>
 </project>
