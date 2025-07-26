@@ -17,10 +17,10 @@ public class InterpreterData {
         this.funcs = funcs;
         this.local = local;
         this.asyncTasks = asyncTasks;
-        this.events = get_event_names();
+        this.events = getEventNames();
     }
 
-    public HashMap<String, Interpreter> get_event_names(){ // this temporary until i map out all the fabric events
-        return new HashMap<String, Interpreter>();
+    public HashMap<String, Interpreter> getEventNames() { // this temporary until i map out all the fabric events
+        return new HashMap<>();
     }
 }

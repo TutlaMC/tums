@@ -4,44 +4,44 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 public class Interpreter {
-    public Object data;
+
+    private static Lexer lexer;
+
+    public InterpreterData data;
     public String text;
     public String file;
     public List<Token> tokens;
 
-    private static Lexer lexer;
 
-    public Interpreter(){
+    public Interpreter() {
 
     }
 
-    public void setup(HashMap<String, Object> data, List<Token> tokens, String text, String file){
-        if (data == null){
-            this.data = new InterpreterData(null, null, null, null);
-        } else {
-            this.data = data;
-        }
-        if (text != null){
+    public void setup(InterpreterData data, List<Token> tokens, String text, String file){
+        this.data = data != null ? data : new InterpreterData(null, null, null, null);
+
+        if (text != null)
             this.text = text;
-        }
-        if (file != null){
+
+        if (file != null) {
             this.text = readFileContents(file);
             this.file = file;
-        } else {
+        }
+        else {
             this.file = "<stdin>";
         }
+
+
         if (tokens != null){
             lexer = new Lexer(text, this);
             this.tokens = lexer.classify();
         }
-
     }
 
-    public void compile(){
+    public void compile() {
 
     }
 

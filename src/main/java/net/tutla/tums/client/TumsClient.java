@@ -8,6 +8,4 @@ public class TumsClient implements ClientModInitializer {
     public void onInitializeClient() {
 
     }
-
-
 }

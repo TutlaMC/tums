@@ -8,6 +8,4 @@ public class Tums implements ModInitializer {
     public void onInitialize() {
         System.out.println("eee");
     }
-
-
 }

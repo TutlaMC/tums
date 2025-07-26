@@ -1,6 +1,7 @@
 package net.tutla.tums.tusan;
 
 public enum TokenType {
+
     STRING,
     NUMBER,
     NOTHING,
