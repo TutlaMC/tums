@@ -1,8 +1,10 @@
 package net.tutla.tums.tusan;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Lexer {
+
     public String text;
     private final Interpreter interpreter;
 
