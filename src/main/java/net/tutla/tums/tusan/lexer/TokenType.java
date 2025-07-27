@@ -22,6 +22,7 @@ public enum TokenType {
 
     TIME,
     BREAKSTRUCTURE,
+    ENDSTRUCTURE,
 
     // symbols
     LEFT_CURLY,

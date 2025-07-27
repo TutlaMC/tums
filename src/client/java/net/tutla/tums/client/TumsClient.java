@@ -6,6 +6,6 @@ public class TumsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient(){
-        System.out.println("weeeb");
+
     }
 }

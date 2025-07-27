@@ -5,6 +5,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,22 +36,22 @@ public class Interpreter {
 
     }
 
-    public void setup(InterpreterData data, List<Token> _tokens, String text, String file){
+    public void setup(InterpreterData data, List<Token> _tokens, String _text, Path file){
         this.data = data != null ? data : new InterpreterData(null, null, null, null);
 
-        if (text != null)
-            this.text = text;
-
+        if (_text != null) {
+            this.text = _text;
+        }
         if (file != null) {
             this.text = readFileContents(file);
-            this.file = file;
+            this.file = String.valueOf(file.toAbsolutePath());
         }
         else {
             this.file = "<stdin>";
         }
 
         if (_tokens == null){
-            lexer = new Lexer(text, this);
+            lexer = new Lexer(this.text, this);
             this.tokens = lexer.classify();
         } else {
             this.tokens = _tokens;
@@ -62,15 +64,15 @@ public class Interpreter {
     public Object compile() {
         end = false;
         caughtError = false;
-        System.out.println(tokens);
-        for (Token t : tokens){
+
+        /* for (Token t : tokens){
             System.out.print(t.type);
             System.out.print(":");
             System.out.print(t.value);
             System.out.print("\n");
-        }
+        } */
         System.out.println("======= OUTPUT =======");
-        while (pos <= tokens.toArray().length-1){
+        while (this.pos <= tokens.toArray().length-1){
             if (end){
                 return returned;
             }
@@ -113,7 +115,7 @@ public class Interpreter {
     public Token nextToken(){
         Token nxt = getNextToken();
         if (nxt != null){
-            pos++;
+            this.pos++;
             currentToken = tokens.get(pos);
             return nxt;
         } else {
@@ -131,6 +133,17 @@ public class Interpreter {
             return null;
         }
     }
+
+    public Token expectToken(TokenType token, String name){
+        Token nxt = nextToken();
+        if (nxt.type == token && nxt.value.equals(name)){
+            return nxt;
+        } else {
+            error("UnexpectedToken", "Expected "+token.name()+":"+name+" got "+nxt.type.name(), null);
+            return null;
+        }
+    }
+
 
     public void error(String name, String detail, List<String> notes){
         if (!caughtError){
@@ -183,17 +196,9 @@ public class Interpreter {
         return recreated.toString();
     }
 
-    public static String readFileContents(String path) {
+    public static String readFileContents(Path path) {
         try {
-            File nfile = new File(path);
-            FileInputStream fis = new FileInputStream(nfile);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            byte[] bytes = bis.readAllBytes();
-            String contents = new String(bytes);
-
-            bis.close();
-            fis.close();
-            return contents;
+            return Files.readString(path);
         }
         catch (IOException ex) {
             throw new RuntimeException(ex);

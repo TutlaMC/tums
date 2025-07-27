@@ -1,15 +1,16 @@
 package net.tutla.tums;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.Event;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket;
-import net.minecraft.text.Text;
+import net.fabricmc.loader.api.FabricLoader;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Tums implements ModInitializer {
     public HashMap<Event, List<Interpreter>> EventMappings;
@@ -17,10 +18,35 @@ public class Tums implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        Interpreter interpreter = new Interpreter();
-        interpreter.setup(null,null,"print 1+7*(7/2)",null);
-        interpreter.compile();
+        Path gameDir = FabricLoader.getInstance().getGameDir();
+        Path scriptsDir = gameDir.resolve("tums/scripts");
+        Path tumsDir = gameDir.resolve("tums");
+        try {
+            Files.createDirectories(tumsDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        
+
+        try (Stream<Path> stream = Files.list(scriptsDir)) {
+            stream
+                    .filter(Files::isRegularFile)
+                    .forEach(path -> {
+                        Interpreter interpreter = new Interpreter();
+                        interpreter.setup(null,null,null, path);
+                        try{
+                            interpreter.compile();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
     }
 }
