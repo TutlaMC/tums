@@ -3,6 +3,7 @@ package net.tutla.tums.tusan.nodes;
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.nodes.effects.Print;
+import net.tutla.tums.tusan.nodes.effects.Set;
 
 import java.util.Objects;
 
@@ -12,8 +13,10 @@ public class Effect extends Node {
         super(token);
     }
     public Effect create(){
-        if (Objects.equals(token.value, "print")){
+        if (token.value.equals("print")){
             new Print(interpreter.nextToken()).create();
+        } else if (token.value.equals("set")) {
+            new Set(token).create();
         }
         value = null;
         return this;

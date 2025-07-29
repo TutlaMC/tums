@@ -18,8 +18,8 @@ public class Lexer {
     // Keyword Definitions
 
     public final List<String> structures = Arrays.asList("if","on","loop","while");
-    public final List<String> effects = Arrays.asList("print");
-    public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then");
+    public final List<String> effects = Arrays.asList("print", "set");
+    public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then","to");
     public final List<String> timeReprs = Arrays.asList("miliseconds","seconds","minutes","hours","days","weeks","months","years","milisecond","second","minute","hour","day","week","month","year");
     public final List<String> types = Arrays.asList("STRING","BOOL","NUMBER","NOTHING");
 
@@ -150,7 +150,7 @@ public class Lexer {
                             register(TokenType.EFFECT, tok);
                         } else if (structures.contains(tok)) {
                             register(TokenType.STRUCTURE, tok);
-                        } else if (tok == "end") {
+                        } else if (tok.equals("end")) {
                             register(TokenType.ENDSTRUCTURE, tok);
                         } else if (timeReprs.contains(tok)) {
                             if (tok.endsWith("s")){

@@ -37,7 +37,7 @@ public class If extends Node {
                     structures--;
                     interpreter.nextToken();
                 }
-            } else if ((nxt.type == TokenType.KEYWORD && nxt.value == "elseif") && structures == 0) {
+            } else if ((nxt.type == TokenType.KEYWORD && nxt.value.equals("elseif")) && structures == 0) {
                 interpreter.nextToken();
                 if (runIf == false){
                     condition = new Condition(interpreter.nextToken()).create();

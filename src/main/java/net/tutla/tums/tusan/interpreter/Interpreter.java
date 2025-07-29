@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.tutla.tums.tusan.lexer.Lexer;
@@ -64,6 +65,8 @@ public class Interpreter {
     public Object compile() {
         end = false;
         caughtError = false;
+
+        
 
         /* for (Token t : tokens){
             System.out.print(t.type);
@@ -142,6 +145,33 @@ public class Interpreter {
             error("UnexpectedToken", "Expected "+token.name()+":"+name+" got "+nxt.type.name(), null);
             return null;
         }
+    }
+
+    public Token expectTokenClassic(String tokenTypes) {
+        String[] types = tokenTypes.replace(" ", "").split("\\|");
+        Token nextTkn = getNextToken();
+
+        for (String t : types) {
+            if (t.contains(":")) {
+                String expectedValue = t.split(":")[1];
+                if (expectedValue.equals(nextTkn.value)) {
+                    return nextToken();
+                }
+            } else {
+                if (nextTkn.type.toString().equalsIgnoreCase(t)) {
+                    return nextToken();
+                }
+            }
+        }
+
+        if (Arrays.asList(types).contains("IDENTIFIER")) {
+            error("UnexpectedToken", "Expected token " + Arrays.toString(types) + ", got " + nextTkn,
+                    List.of("Possible Fix: You might have entered a keyword as a variable name, try renaming it"));
+        } else {
+            error("UnexpectedToken", "Expected token " + Arrays.toString(types) + ", got " + nextTkn, null);
+        }
+
+        return null;
     }
 
 

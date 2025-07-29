@@ -44,9 +44,5 @@ public class Tums implements ModInitializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 }

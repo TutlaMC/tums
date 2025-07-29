@@ -2,17 +2,17 @@ package net.tutla.tums.tusan.nodes.expression;
 
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.Types;
+import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.Effect;
+import net.tutla.tums.tusan.nodes.base.Name;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Factor extends Node {
     public Object value;
+    private final Utils util = new Utils();
     public Factor(Token token){
         super(token);
     }
@@ -62,7 +62,29 @@ public class Factor extends Node {
         } else if (token.type == TokenType.EFFECT) {
             value = new Effect(token).create().value;
         } else if (token.type == TokenType.IDENTIFIER){
-            // variable/function mappings
+            Object ordn = util.isOrdinal(token);
+            if (ordn != null){
+                int n = ((Double) ordn).intValue();
+                n--;
+                interpreter.expectTokenClassic("KEYWORD:character|KEYWORD:item");
+                interpreter.expectToken(TokenType.LOGIC, "in");
+                Object list = new Factor(interpreter.nextToken()).create().value;
+                if (list instanceof List) {
+                    value = ((List<Object>) list).get(n);
+                } else if (list instanceof Map) {
+                    int i = 0;
+                    for (Object v : ((Map<?, ?>) list).values()) {
+                        if (i == n) value = v;
+                        i++;
+                    }
+                }
+            } else if (interpreter.data.vars.containsKey(token.value)){
+                value = new Name(token).create().value;
+            } else if (interpreter.data.funcs.containsKey(token.value)){
+                // function shit here
+            } else {
+                interpreter.error("UndefinedVariable",token.value+" was not defined", null);
+            }
         } else if (token.type == TokenType.LEFT_PAR) {
             value = new Expression(interpreter.nextToken()).create().value;
         } else if (token.type == TokenType.LEFT_CURLY){ // TSON :fire: (Tutla's Object Notation or Tutla's Shitty Object Notation)
