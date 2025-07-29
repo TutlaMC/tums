@@ -16,8 +16,9 @@ public class Term extends Node {
     public Term create(){
         Factor term1 = new Factor(token).create();
         if (interpreter.getNextToken().type == TokenType.OPERATOR){
-            Token op = interpreter.nextToken();
+            Token op = interpreter.getNextToken();
             if (Arrays.asList("*","/","**","^").contains(op.value)){
+                interpreter.nextToken();
                 Expression term2 = new Expression(interpreter.nextToken()).create();
 
                 if (Objects.equals(op.value, "*")){

@@ -35,7 +35,7 @@ public class Expression extends Node {
                 if (Objects.equals(op.value, "<")){
                     value = (Double) term1.value < (Double) term2.value;
                 } else if (Objects.equals(op.value, ">")) {
-                    value = (Double) term1.value < (Double) term2.value;
+                    value = (Double) term1.value > (Double) term2.value;
                 } else if (Objects.equals(op.value, "<=")) {
                     value = (Double) term1.value <= (Double) term2.value;
                 } else if (Objects.equals(op.value, ">=")) {
@@ -44,6 +44,8 @@ public class Expression extends Node {
                     value = !(term1.value.equals(term2.value));
                 } else if (Objects.equals(op.value, "==") || Objects.equals(op.value, "is")) {
                     value = term1.value.equals(term2.value);
+                } else {
+                    interpreter.error("InvalidComparison","Received invalid comparison "+op.value,null);
                 }
             }
         } else {

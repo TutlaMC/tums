@@ -66,7 +66,7 @@ public class Interpreter {
         end = false;
         caughtError = false;
 
-        
+
 
         /* for (Token t : tokens){
             System.out.print(t.type);
@@ -102,6 +102,7 @@ public class Interpreter {
 
         }
         meetEnd();
+
         return returned;
     }
 
@@ -246,5 +247,6 @@ public class Interpreter {
 
     public void meetEnd(){
         this.end = true;
+        System.exit(0);
     }
 }

@@ -41,6 +41,8 @@ public class Condition extends Node {
             } else if (operator.equals("in")) {
                 // WIP
             }
+        } else {
+            value = (Boolean) expr1.value;
         }
 
         if (opposite){
@@ -50,6 +52,7 @@ public class Condition extends Node {
                 value = true;
             }
         }
+
         return this;
     }
 }
