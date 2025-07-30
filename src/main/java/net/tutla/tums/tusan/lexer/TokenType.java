@@ -7,6 +7,7 @@ public enum TokenType {
     BOOL,
     NOTHING,
     TYPE,
+    EVENT,
 
     PROPERTY,
     OPERATOR,

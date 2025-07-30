@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Lexer;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
@@ -20,6 +21,7 @@ import net.tutla.tums.tusan.nodes.base.Return;
 public class Interpreter {
 
     private static Lexer lexer;
+    public Utils util = new Utils();
 
     public InterpreterData data;
     public String text;
@@ -247,6 +249,6 @@ public class Interpreter {
 
     public void meetEnd(){
         this.end = true;
-        System.exit(0);
+        // System.exit(0);
     }
 }

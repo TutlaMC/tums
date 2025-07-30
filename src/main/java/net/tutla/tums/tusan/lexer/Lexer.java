@@ -1,6 +1,8 @@
 package net.tutla.tums.tusan.lexer;
 
+import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
+import net.tutla.tums.tusan.nodes.tums.EventType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +19,7 @@ public class Lexer {
 
     // Keyword Definitions
 
-    public final List<String> structures = Arrays.asList("if","on","loop","while");
+    public final List<String> structures = Arrays.asList("if","on","loop","while","on");
     public final List<String> effects = Arrays.asList("print", "set");
     public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all");
     public final List<String> timeReprs = Arrays.asList("miliseconds","seconds","minutes","hours","days","weeks","months","years","milisecond","second","minute","hour","day","week","month","year");
@@ -152,9 +154,11 @@ public class Lexer {
                             register(TokenType.STRUCTURE, tok);
                         } else if (tok.equals("end")) {
                             register(TokenType.ENDSTRUCTURE, tok);
+                        } else if (Utils.isEventType(tok)) {
+                            register(TokenType.EVENT, tok);
                         } else if (timeReprs.contains(tok)) {
                             if (tok.endsWith("s")){
-                                tok.substring(0, tok.length() - 1);
+                                tok = tok.substring(0, tok.length() - 1);
                             }
                             register(TokenType.TIME, tok);
                         } else {

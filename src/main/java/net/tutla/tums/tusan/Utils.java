@@ -1,15 +1,23 @@
 package net.tutla.tums.tusan;
 
+import net.fabricmc.fabric.api.event.Event;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
+import net.tutla.tums.tusan.nodes.tums.EventType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Utils {
+    public HashMap<String, Object> eventMappings; // TODO: since this could also be a packet, well im not sure so improper help
+    public Utils(){
+        HashMap<String, Object> eventMappings = new HashMap<>();
+        eventMappings.put("ON_LEFT_CLICK", null); // TODO: put actual event here, improper help
+    }
     public Object getType(Object token) {
         Object e;
         Class<?> type_;
@@ -82,6 +90,16 @@ public class Utils {
             list.add(i);
         }
         return list;
+    }
+
+    public static boolean isEventType(String value) {
+        String lowerValue = value.toLowerCase();
+        for (EventType e : EventType.values()) {
+            if (e.name().toLowerCase().equals(lowerValue)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
