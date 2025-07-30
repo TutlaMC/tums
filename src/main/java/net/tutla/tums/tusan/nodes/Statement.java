@@ -18,13 +18,16 @@ public class Statement extends Node {
         super(token);
     }
     public Object create(){
-        if (token.type == TokenType.LEFT_CURLY){
-            new Statement(interpreter.nextToken()).create();
-            interpreter.expectTokenType(TokenType.RIGHT_CURLY);
-        }
+
         Object value = false;
         if (interpreter.end){
             return false;
+        }
+
+        if (token.type == TokenType.LEFT_CURLY){
+            new Statement(interpreter.nextToken()).create();
+            interpreter.expectTokenType(TokenType.RIGHT_CURLY);
+            return value;
         }
 
         if (validTypes.contains(token.type)){
