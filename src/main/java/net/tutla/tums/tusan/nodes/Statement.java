@@ -8,6 +8,7 @@ import net.tutla.tums.tusan.nodes.base.Return;
 import net.tutla.tums.tusan.nodes.base.loops.Loop;
 import net.tutla.tums.tusan.nodes.base.loops.While;
 import net.tutla.tums.tusan.nodes.expression.Expression;
+import net.tutla.tums.tusan.nodes.tums.On;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +41,8 @@ public class Statement extends Node {
                     new While(interpreter.nextToken()).create();
                 } else if (token.value.equals("loop")) {
                     new Loop(interpreter.nextToken()).create();
+                } else if (token.value.equals("on")) {
+                    new On(token).create();
                 } else {
                     interpreter.error("UnexpectedToken", "Structure "+token.type.name()+":"+token.value+" has no definition", null);
                 }

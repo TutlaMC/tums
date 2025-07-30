@@ -24,6 +24,7 @@ public class Lexer {
     public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all");
     public final List<String> timeReprs = Arrays.asList("miliseconds","seconds","minutes","hours","days","weeks","months","years","milisecond","second","minute","hour","day","week","month","year");
     public final List<String> types = Arrays.asList("STRING","BOOL","NUMBER","NOTHING");
+    // event mappings are in tusan.Utils
 
     public Lexer(String text, Interpreter interpreter) {
         this.text = text;

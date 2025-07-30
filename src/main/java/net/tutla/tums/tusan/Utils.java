@@ -15,8 +15,8 @@ import java.util.Map;
 public class Utils {
     public HashMap<String, Object> eventMappings; // TODO: since this could also be a packet, well im not sure so improper help
     public Utils(){
-        HashMap<String, Object> eventMappings = new HashMap<>();
-        eventMappings.put("ON_LEFT_CLICK", null); // TODO: put actual event here, improper help
+        eventMappings = new HashMap<>();
+        eventMappings.put("LEFT_CLICK", null); // TODO: put actual event here, improper help
     }
     public Object getType(Object token) {
         Object e;

@@ -6,12 +6,13 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class On extends Node {
     private Integer structures = 0;
-    public List<Token> tokens;
+    public List<Token> tokens = new ArrayList<>();
 
     public On(Token token){
         super(token);
@@ -38,6 +39,7 @@ public class On extends Node {
                     }
                     tokens.add(nxt);
                 }
+
             }
             Interpreter intr = new Interpreter();
             intr.setup(interpreter.data, tokens, null, null);
