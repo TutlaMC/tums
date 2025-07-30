@@ -58,7 +58,7 @@ public class Interpreter {
             this.tokens = lexer.classify();
         } else {
             this.tokens = _tokens;
-            this.tokens = change_tokens_parent(this);
+            this.tokens = changeTokensParent(this);
         }
 
         this.currentToken = tokens.get(this.pos);
@@ -238,7 +238,7 @@ public class Interpreter {
         }
     }
 
-    public List<Token> change_tokens_parent(Interpreter interpreter){
+    public List<Token> changeTokensParent(Interpreter interpreter){
         List<Token> s = new ArrayList<>();
         for (Token token : this.tokens){
             token.interpreter = this;
