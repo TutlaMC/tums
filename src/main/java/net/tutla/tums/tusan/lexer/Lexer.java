@@ -2,7 +2,6 @@ package net.tutla.tums.tusan.lexer;
 
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
-import net.tutla.tums.tusan.nodes.tums.EventType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

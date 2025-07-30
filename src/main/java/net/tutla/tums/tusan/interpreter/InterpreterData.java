@@ -1,12 +1,11 @@
 package net.tutla.tums.tusan.interpreter;
 
 import net.tutla.tums.tusan.Variable;
-import net.tutla.tums.tusan.nodes.tums.EventType;
+import net.tutla.tums.tusan.EventType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InterpreterData {
     public final HashMap<String, Object> vars;

@@ -1,11 +1,9 @@
 package net.tutla.tums.tusan;
 
-import net.fabricmc.fabric.api.event.Event;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
-import net.tutla.tums.tusan.nodes.tums.EventType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

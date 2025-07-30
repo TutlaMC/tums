@@ -1,4 +1,4 @@
-package net.tutla.tums.tusan.nodes.tums;
+package net.tutla.tums.tusan;
 
 public enum EventType {
     // client side
