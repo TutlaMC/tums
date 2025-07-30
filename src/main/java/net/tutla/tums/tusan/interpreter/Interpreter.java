@@ -143,7 +143,7 @@ public class Interpreter {
         if (nxt.type == token && nxt.value.equals(name)){
             return nxt;
         } else {
-            error("UnexpectedToken", "Expected "+token.name()+":"+name+" got "+nxt.type.name(), null);
+            error("UnexpectedToken", "Expected "+token.name()+":"+name+" got "+nxt.type.name()+":"+nxt.value, null);
             return null;
         }
     }

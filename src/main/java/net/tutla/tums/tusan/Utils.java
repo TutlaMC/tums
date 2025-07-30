@@ -5,6 +5,7 @@ import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,4 +59,29 @@ public class Utils {
     public Boolean isValidIdentifier(String value, Interpreter interpreter){
         return interpreter.data.vars.containsKey(value) || interpreter.data.funcs.containsKey(value);
     }
+
+    public static List<Integer> range(int stop) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < stop; i += 1) {
+            list.add(i);
+        }
+        return list;
+    }
+
+    public static List<Integer> range(int start, int stop) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = start; i < stop; i += 1) {
+            list.add(i);
+        }
+        return list;
+    }
+
+    public static List<Integer> range(int start, int stop, int step) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = start; i < stop; i += step) {
+            list.add(i);
+        }
+        return list;
+    }
+
 }
