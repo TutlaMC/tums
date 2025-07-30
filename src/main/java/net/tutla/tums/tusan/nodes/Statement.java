@@ -19,7 +19,7 @@ public class Statement extends Node {
     }
     public Object create(){
         if (token.type == TokenType.LEFT_CURLY){
-            new Statement(interpreter.nextToken());
+            new Statement(interpreter.nextToken()).create();
             interpreter.expectTokenType(TokenType.RIGHT_CURLY);
         }
         Object value = false;
