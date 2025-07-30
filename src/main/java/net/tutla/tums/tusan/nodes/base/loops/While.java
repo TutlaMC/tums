@@ -20,7 +20,7 @@ public class While extends Node {
     public While create(){
         check();
 
-        // this method is ineffecient but does it look like i fucking care
+        // this method is inefficient but does it look like i fucking care
         boolean fned = false;
         int structures = 0;
         while (!fned){
