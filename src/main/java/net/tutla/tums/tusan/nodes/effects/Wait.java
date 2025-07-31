@@ -11,8 +11,8 @@ public class Wait extends Node {
 
     public Wait create() {
         try {
-            Integer time = (Integer) new Expression(interpreter.nextToken()).create().value;
-            Thread.sleep(time);
+            Double time = (Double) new Expression(interpreter.nextToken()).create().value;
+            Thread.sleep(time.intValue());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
