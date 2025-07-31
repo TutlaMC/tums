@@ -6,11 +6,14 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.tutla.tums.Tums;
+import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
+import net.tutla.tums.tusan.tums.objects.TumsEntity;
 import net.tutla.tums.tusan.tums.objects.TumsPlayer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class TumsClient implements ClientModInitializer {
@@ -50,16 +53,15 @@ public class TumsClient implements ClientModInitializer {
 
         AttackEntityCallback.EVENT.register((player, world, hand, target, hitResult) -> {
             if (world.isClient) {
+                HashMap<String, Object> variables = new HashMap<>();
                 if (target instanceof PlayerEntity otherPlayer) {
-                    List<Interpreter> callback = Tums.register.registry.events.get("attack");
-                    for (Interpreter executor : callback){
-                        Interpreter exec  = executor.clone();
-                        exec.data.vars.put("event_player", new TumsPlayer("event_player", otherPlayer));
-                        executor.compile();
-                    }
+                    variables.put("event_player", new TumsPlayer("event_player", otherPlayer));
+                    variables.put("event_entity", new TumsEntity("event_entity", target));
                 } else {
-                    // enity shit here
+                    variables.put("event_player", new TumsPlayer("event_player", null));
+                    variables.put("event_entity", new TumsEntity("event_entity", target));
                 }
+                Utils.executeEvent("attack", variables);
             }
             return ActionResult.PASS;
         });

@@ -6,27 +6,31 @@ import net.tutla.tums.tusan.Variable;
 import java.util.HashMap;
 
 public class TumsPlayer extends Variable {
-    public HashMap<String, Object> playerProps = new HashMap<>();
     public PlayerEntity main;
     public TumsPlayer(String name, PlayerEntity player) {
         super(name, player, null);
-        this.main = player;
+        main = player;
         setProps();
     }
 
     public void setProps(){
-        playerProps.put("display_name", main.getDisplayName());
-        playerProps.put("uuid", main.getUuid());
+        if (main != null){
+            properties.put("display_name", main.getDisplayName());
+            properties.put("uuid", main.getUuid());
 
-        // Health & Inventory
-        playerProps.put("health", main.getHealth());
+            // Health & Inventory
+            properties.put("health", main.getHealth());
 
-        // Position
-        playerProps.put("x", main.getX());
-        playerProps.put("y", main.getY());
-        playerProps.put("z", main.getY());
+            // Position
+            properties.put("x", main.getX());
+            properties.put("y", main.getY());
+            properties.put("z", main.getY());
 
-        playerProps.put("yaw", main.getYaw());
-        playerProps.put("pitch", main.getPitch());
+            properties.put("yaw", main.getYaw());
+            properties.put("pitch", main.getPitch());
+
+            properties.put("javaclass", main);
+        }
+
     }
 }

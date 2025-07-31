@@ -1,11 +1,14 @@
 package net.tutla.tums.tusan;
 
+import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 import net.tutla.tums.tusan.tums.EventType;
+import net.tutla.tums.tusan.tums.objects.TumsPlayer;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,6 +101,26 @@ public class Utils {
             if (e.name().toLowerCase().equals(lowerValue)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public static void executeEvent(String name, HashMap<String, Object> variables){
+        List<Interpreter> callback = Tums.register.registry.events.get(name.toUpperCase());
+        for (Interpreter executor : callback){
+            Interpreter exec  = executor.clone();
+            exec.data.vars.putAll(variables);
+            executor.compile();
+        }
+    }
+
+    public static boolean hasField(Object obj, String fieldName) {
+        Class<?> cls = obj.getClass();
+        while (cls != null) {
+            for (Field field : cls.getDeclaredFields()) {
+                if (field.getName().equals(fieldName)) return true;
+            }
+            cls = cls.getSuperclass();
         }
         return false;
     }

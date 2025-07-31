@@ -1,6 +1,7 @@
 package net.tutla.tums.tusan.nodes.base;
 
 import net.tutla.tums.tusan.Node;
+import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
@@ -19,7 +20,7 @@ public class Name extends Node {
     public Name create() {
         name = token.value;
         if (interpreter.getNextToken().type == TokenType.PROPERTY) {
-            location = getProperties(location.get(name));
+            location = ((Variable) location.get(name)).properties;
             while (interpreter.getNextToken().type == TokenType.PROPERTY) {
                 interpreter.nextToken();
                 name = interpreter.nextToken().value;
@@ -27,7 +28,7 @@ public class Name extends Node {
                 if (!location.containsKey(name)) break;
 
                 if (interpreter.getNextToken().type == TokenType.PROPERTY) {
-                    location = getProperties(location.get(name));
+                    location = ((Variable) location.get(name)).properties;
                 } else {
                     break;
                 }
@@ -45,13 +46,6 @@ public class Name extends Node {
         }
 
         return this;
-    }
-
-    private Map<String, Object> getProperties(Object obj) {
-        if (obj instanceof Variable) {
-            return ((Variable) obj).properties;
-        }
-        return null;
     }
 
     public Object getValue() {
