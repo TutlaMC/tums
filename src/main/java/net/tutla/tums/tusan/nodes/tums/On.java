@@ -41,6 +41,7 @@ public class On extends Node {
                 }
 
             }
+            tokens.add(new Token(TokenType.ENDSCRIPT, "event", interpreter));
             Interpreter intr = new Interpreter();
             intr.setup(interpreter.data, tokens, null, null);
             ((List) interpreter.data.events.get(eventOriginal)).add(intr);
