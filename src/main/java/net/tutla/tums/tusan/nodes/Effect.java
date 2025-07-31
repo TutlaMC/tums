@@ -19,7 +19,7 @@ public class Effect extends Node {
         } else if (token.value.equals("set")) {
             new Set(token).create();
         } else if (token.value.equals("wait")){
-            new Wait(token).create();
+            //new Wait(token).create();
         }
         value = null;
         return this;
