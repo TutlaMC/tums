@@ -29,6 +29,8 @@ public class Interpreter {
     public List<Token> tokens;
     public Object returned;
 
+    private Path filePath;
+
     public Boolean end = false;
     public Boolean caughtError = false;
     public int pos = 0;
@@ -48,6 +50,7 @@ public class Interpreter {
         if (file != null) {
             this.text = readFileContents(file);
             this.file = String.valueOf(file.toAbsolutePath());
+            this.filePath = filePath;
         }
         else {
             this.file = "<stdin>";
@@ -250,5 +253,11 @@ public class Interpreter {
     public void meetEnd(){
         this.end = true;
         // System.exit(0);
+    }
+
+    public Interpreter clone(){
+        Interpreter intr = new Interpreter();
+        intr.setup(data, tokens, text, filePath);
+        return intr;
     }
 }

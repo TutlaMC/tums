@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.interpreter.Interpreter;
+import net.tutla.tums.tusan.tums.objects.TumsPlayer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
@@ -52,10 +53,12 @@ public class TumsClient implements ClientModInitializer {
                 if (target instanceof PlayerEntity otherPlayer) {
                     List<Interpreter> callback = Tums.register.registry.events.get("attack");
                     for (Interpreter executor : callback){
+                        Interpreter exec  = executor.clone();
+                        exec.data.vars.put("event_player", new TumsPlayer("event_player", otherPlayer));
                         executor.compile();
                     }
                 } else {
-                    System.out.println("You hit entity: " + target.getName().getString());
+                    // enity shit here
                 }
             }
             return ActionResult.PASS;
