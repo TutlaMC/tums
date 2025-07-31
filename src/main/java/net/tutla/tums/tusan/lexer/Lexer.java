@@ -19,7 +19,7 @@ public class Lexer {
     // Keyword Definitions
 
     public final List<String> structures = Arrays.asList("if","on","loop","while","on");
-    public final List<String> effects = Arrays.asList("print", "set");
+    public final List<String> effects = Arrays.asList("print", "set", "wait");
     public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all");
     public final List<String> timeReprs = Arrays.asList("miliseconds","seconds","minutes","hours","days","weeks","months","years","milisecond","second","minute","hour","day","week","month","year");
     public final List<String> types = Arrays.asList("STRING","BOOL","NUMBER","NOTHING");
