@@ -12,10 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Utils {
-    public HashMap<String, Object> eventMappings; // TODO: since this could also be a packet, well im not sure so improper help
+    public List<String> eventMappings = new ArrayList<>();
     public Utils(){
-        eventMappings = new HashMap<>();
-        eventMappings.put("LEFT_CLICK", null); // TODO: put actual event here, improper help
+        for (EventType name : EventType.values()){
+            eventMappings.add(name.name());
+        }
     }
     public Object getType(Object token) {
         Object e;

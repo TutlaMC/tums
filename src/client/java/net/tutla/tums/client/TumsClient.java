@@ -2,13 +2,15 @@ package net.tutla.tums.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
 import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
 import java.util.List;
-import java.util.Map;
 
 public class TumsClient implements ClientModInitializer {
     private boolean mouseCallbackSet = false;
@@ -43,6 +45,20 @@ public class TumsClient implements ClientModInitializer {
 
                 mouseCallbackSet = true;
             }
+        });
+
+        AttackEntityCallback.EVENT.register((player, world, hand, target, hitResult) -> {
+            if (world.isClient) {
+                if (target instanceof PlayerEntity otherPlayer) {
+                    List<Interpreter> callback = Tums.register.registry.events.get("attack");
+                    for (Interpreter executor : callback){
+                        executor.compile();
+                    }
+                } else {
+                    System.out.println("You hit entity: " + target.getName().getString());
+                }
+            }
+            return ActionResult.PASS;
         });
     }
 }

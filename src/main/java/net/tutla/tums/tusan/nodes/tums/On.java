@@ -21,7 +21,7 @@ public class On extends Node {
     public On create(){
         String eventOriginal = interpreter.expectTokenType(TokenType.EVENT).value.toUpperCase();
 
-        if (interpreter.util.eventMappings.containsKey(eventOriginal)){
+        if (interpreter.util.eventMappings.contains(eventOriginal)){
             Boolean end = false;
 
             while (!end){
