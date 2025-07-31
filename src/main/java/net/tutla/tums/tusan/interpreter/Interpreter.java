@@ -68,6 +68,7 @@ public class Interpreter {
     }
 
     public Object compile() {
+        changeTokensParent(this);
         end = false;
         caughtError = false;
         pos = 0;
@@ -79,8 +80,8 @@ public class Interpreter {
             System.out.print(t.value);
             System.out.print("\n");
         } */
-        System.out.println("======= OUTPUT =======");
-        while (this.pos <= tokens.toArray().length-1){
+        System.out.println("==================== OUTPUT ===================");
+        while (pos <= tokens.toArray().length-1){
             if (end){
                 return returned;
             }
@@ -89,13 +90,8 @@ public class Interpreter {
             } else if (currentToken.type == TokenType.BREAKSTRUCTURE && currentToken.value.equals("return")){
                 this.returned = new Return(currentToken).create();
             } else {
-                if (currentToken.type == TokenType.ENDSCRIPT){
-                    meetEnd();
-                } else {
-                    new Statement(currentToken).create();
-                }
+                new Statement(currentToken).create();
             }
-
             if (getNextToken() == null){
                 meetEnd();
             } else {
@@ -244,7 +240,7 @@ public class Interpreter {
     public List<Token> changeTokensParent(Interpreter interpreter){
         List<Token> s = new ArrayList<>();
         for (Token token : this.tokens){
-            token.interpreter = this;
+            token.interpreter = interpreter;
             s.add(token);
         }
         return s;
@@ -252,6 +248,7 @@ public class Interpreter {
 
     public void meetEnd(){
         this.end = true;
+        System.out.println("=======================================");
         // System.exit(0);
     }
 

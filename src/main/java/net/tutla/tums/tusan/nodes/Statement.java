@@ -30,7 +30,6 @@ public class Statement extends Node {
             interpreter.expectTokenType(TokenType.RIGHT_CURLY);
             return value;
         }
-
         if (validTypes.contains(token.type)){
             if (token.type == TokenType.EFFECT){
                 value = new Effect(token).create();

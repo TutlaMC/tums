@@ -109,6 +109,7 @@ public class Utils {
         List<Interpreter> callback = Tums.register.registry.events.get(name.toUpperCase());
         for (Interpreter executor : callback){
             Interpreter exec  = executor.clone();
+            exec.changeTokensParent(exec);
             exec.data.vars.putAll(variables);
             executor.compile();
         }
