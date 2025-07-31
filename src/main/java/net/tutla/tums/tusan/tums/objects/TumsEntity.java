@@ -3,7 +3,7 @@ package net.tutla.tums.tusan.tums.objects;
 import net.minecraft.entity.Entity;
 import net.tutla.tums.tusan.Variable;
 
-import java.util.HashMap;
+import java.util.Objects;
 
 public class TumsEntity extends Variable {
     public Entity main;
@@ -14,7 +14,7 @@ public class TumsEntity extends Variable {
     }
 
     public void setProps(){
-        properties.put("name", main.getDisplayName());
+        properties.put("name", Objects.requireNonNull(main.getDisplayName()).getString());
         properties.put("nametag", main.getCustomName());
 
         // Health & Inventory

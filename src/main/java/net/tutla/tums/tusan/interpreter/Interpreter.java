@@ -80,7 +80,7 @@ public class Interpreter {
             System.out.print(t.value);
             System.out.print("\n");
         } */
-        System.out.println("==================== OUTPUT ===================");
+        System.out.println("================ OUTPUT ===============");
         while (pos <= tokens.toArray().length-1){
             if (end){
                 return returned;
@@ -199,7 +199,7 @@ public class Interpreter {
         StringBuilder recreated = new StringBuilder();
         StringBuilder arrows = new StringBuilder();
         int npos = 0;
-        String target = "NOTHING:UNKOWN";
+        String target = "NOTHING:UNKNOWN";
         for (Token i : tokens){
             npos++;
             if (npos >= pos-2 && npos <= pos+4){
