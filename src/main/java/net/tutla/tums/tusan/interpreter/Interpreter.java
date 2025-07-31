@@ -67,8 +67,8 @@ public class Interpreter {
     public Object compile() {
         end = false;
         caughtError = false;
-
-
+        pos = 0;
+        currentToken = tokens.get(pos);
 
         /* for (Token t : tokens){
             System.out.print(t.type);
