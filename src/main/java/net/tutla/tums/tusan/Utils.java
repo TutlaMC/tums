@@ -4,6 +4,7 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
+import net.tutla.tums.tusan.tums.EventType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
