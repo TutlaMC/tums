@@ -26,7 +26,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
 
         Boolean paramChecks = false;
 
-        interpreter.expectTokenType(TokenType.RIGHT_PAR);
+        interpreter.expectTokenType(TokenType.LEFT_PAR);
         while (interpreter.getNextToken().type == TokenType.IDENTIFIER){
             String parameterName = interpreter.nextToken().value;
             FunctionParameter parameter = new FunctionParameter(parameterName);
@@ -51,8 +51,8 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
 
             parameters.add(parameter);
         }
-
-        interpreter.expectTokenClassic("KEYWORD:that");
+        interpreter.expectTokenType(TokenType.RIGHT_PAR)
+        interpreter.expectToken(TokenType.KEYWORD, "that");
 
         List<Token> tokens = new ArrayList<>();
         int structures = 0;
