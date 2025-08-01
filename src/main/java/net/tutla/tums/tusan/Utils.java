@@ -126,4 +126,35 @@ public class Utils {
         return false;
     }
 
+    public static List<Types> getTypes(){
+        List<Types> types = new ArrayList<>();
+        for (Types type : Types.values()){
+            types.add(type);
+        }
+        return types;
+    }
+
+    public static List<String> getTypeNames(){
+        List<String> types = new ArrayList<>();
+        for (Types type : Types.values()){
+            types.add(type.name().toUpperCase());
+        }
+        return types;
+    }
+
+    public static Types getTypeFromName(Token token){
+        if (token.type == TokenType.TYPE){
+            for (Types type : Types.values()){
+                if (token.value.equalsIgnoreCase(type.name())){
+                    return type;
+                }
+                token.interpreter.error("InvalidType",token.type.name()+":"+token.value+" is not a valid type", null);
+                return Types.NOTHING;
+            }
+        } else {
+            token.interpreter.error("InvalidType",token.type.name()+":"+token.value+" is not a valid type", null);
+        }
+        return Types.NOTHING;
+    }
+
 }

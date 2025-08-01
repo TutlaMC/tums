@@ -13,6 +13,7 @@ public enum TokenType {
     OPERATOR,
     LOGIC,
     COMPARISION,
+    EQUAL,
 
     IDENTIFIER, // undefined keywords basically
     ENDSCRIPT, // end of script

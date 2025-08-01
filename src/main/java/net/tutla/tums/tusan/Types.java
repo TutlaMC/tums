@@ -7,4 +7,5 @@ public enum Types {
     NOTHING,
     LIST,
     TSON,
+    ANY
 }

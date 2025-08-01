@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.lexer;
 
+import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 
@@ -20,9 +21,11 @@ public class Lexer {
 
     public final List<String> structures = Arrays.asList("if","on","loop","while","on");
     public final List<String> effects = Arrays.asList("print", "set", "wait");
-    public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all");
+    public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all", "that");
     public final List<String> timeReprs = Arrays.asList("miliseconds","seconds","minutes","hours","days","weeks","months","years","milisecond","second","minute","hour","day","week","month","year");
-    public final List<String> types = Arrays.asList("STRING","BOOL","NUMBER","NOTHING");
+    public final List<String> types = Utils.getTypeNames();
+
+
     // event mappings are in tusan.Utils
 
     public Lexer(String text, Interpreter interpreter) {
@@ -136,6 +139,8 @@ public class Lexer {
                             register(TokenType.NUMBER, tok);
                         } else if (tok.equals("true") || tok.equals("false")) {
                             register(TokenType.BOOL, tok);
+                        } else if (tok.equals("=")){
+                            register(TokenType.EQUAL, tok);
                         } else if (Arrays.asList("and","or","not","contains","in","||","&&").contains(tok)){
                             register(TokenType.LOGIC, tok);
                         } else if (Arrays.asList(">","<","<=",">=","==","!=","is").contains(tok)){
