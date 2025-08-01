@@ -7,6 +7,8 @@ import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.Effect;
 import net.tutla.tums.tusan.nodes.base.Name;
+import net.tutla.tums.tusan.nodes.base.function.ExecuteFunction;
+import net.tutla.tums.tusan.nodes.base.function.FunctionRegistry;
 
 import java.util.*;
 
@@ -81,7 +83,7 @@ public class Factor extends Node {
             } else if (interpreter.data.vars.containsKey(token.value)){
                 value = new Name(token).create().value;
             } else if (interpreter.data.funcs.containsKey(token.value)){
-                // function shit here
+                new ExecuteFunction(token).create();
             } else {
                 interpreter.error("UndefinedVariable",token.value+" was not defined", null);
             }

@@ -5,6 +5,7 @@ import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.base.If;
 import net.tutla.tums.tusan.nodes.base.Return;
+import net.tutla.tums.tusan.nodes.base.function.FunctionNode;
 import net.tutla.tums.tusan.nodes.base.loops.Loop;
 import net.tutla.tums.tusan.nodes.base.loops.While;
 import net.tutla.tums.tusan.nodes.expression.Expression;
@@ -42,6 +43,8 @@ public class Statement extends Node {
                     new Loop(interpreter.nextToken()).create();
                 } else if (token.value.equals("on")) {
                     new On(token).create();
+                } else if (token.value.equals("function")) {
+                    new FunctionNode(interpreter.nextToken()).create();
                 } else {
                     interpreter.error("UnexpectedToken", "Structure "+token.type.name()+":"+token.value+" has no definition", null);
                 }

@@ -22,9 +22,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
     }
 
     public FunctionNode create(){
-
-
-        Boolean paramChecks = false;
+        Boolean paramChecks = false; // checking optional parameters
 
         interpreter.expectTokenType(TokenType.LEFT_PAR);
         while (interpreter.getNextToken().type == TokenType.IDENTIFIER){
@@ -34,7 +32,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
                 interpreter.nextToken();
                 parameter.setType(Utils.getTypeFromName(interpreter.nextToken()));
             } else {
-                parameter.setType(Types.NOTHING);
+                parameter.setType(Types.ANY);
             }
 
             if (interpreter.getNextToken().type == TokenType.EQUAL){
@@ -44,6 +42,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
             } else {
                 if (!paramChecks){
                     parameter.setFallback(null);
+                    parameter.setRequired(true);
                 } else {
                     interpreter.error("SyntaxError", "You cannot use required parameters after optional parameters", Arrays.asList("Move the optional parameters to the end of the function"));
                 }
@@ -90,9 +89,9 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
                 }
             }
         }
+        tokens.add(new Token(TokenType.ENDSCRIPT, "function", interpreter));
 
         functionInterpreter.setup(interpreter.data, tokens, null, null );
-        functionInterpreter.changeTokensParent(functionInterpreter);
         interpreter.data.funcs.put(name, new FunctionRegistry(parameters, functionInterpreter));
 
         return this;

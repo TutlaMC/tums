@@ -9,10 +9,7 @@ import net.tutla.tums.tusan.tums.EventType;
 import net.tutla.tums.tusan.tums.objects.TumsPlayer;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Utils {
     public List<String> eventMappings = new ArrayList<>();
@@ -148,13 +145,22 @@ public class Utils {
                 if (token.value.equalsIgnoreCase(type.name())){
                     return type;
                 }
-                token.interpreter.error("InvalidType",token.type.name()+":"+token.value+" is not a valid type", null);
-                return Types.NOTHING;
             }
-        } else {
             token.interpreter.error("InvalidType",token.type.name()+":"+token.value+" is not a valid type", null);
+            return Types.NOTHING;
+        } else {
+            token.interpreter.error("InvalidType",token.type.name()+":"+token.value+" is not a valid token type", Arrays.asList("This is most likely an interpreter issue"));
         }
         return Types.NOTHING;
+    }
+
+    public static Types getTypeOfValue(Object value){
+        value = value.getClass();
+        if (value instanceof Integer || value instanceof Double) {
+            return Types.NUMBER;
+        } else {
+            return null;
+        }
     }
 
 }
