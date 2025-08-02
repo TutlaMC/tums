@@ -39,7 +39,7 @@ public class Lexer {
     }
 
     public List<Token> classify() {
-        String[] symbols = {"(", ")", "{", "}", "[", "]", ",", ";", ":"};
+        String[] symbols = {"(", ")", "{", "}", "[", "]", ",", ";", ":","="};
         for (String sym : symbols){
             text = text.replace(sym, " " + sym + " ");
         }
@@ -86,7 +86,7 @@ public class Lexer {
                 }
 
             } else {
-                if ("(){}[],;:".indexOf(j) != -1) {
+                if ("(){}[],;:=".indexOf(j) != -1) {
                     if (j == '('){
                         register(TokenType.LEFT_PAR, String.valueOf(j));
                     } else  if (j == ')'){
@@ -105,6 +105,8 @@ public class Lexer {
                         register(TokenType.SEMICOLON, String.valueOf(j));
                     } else if (j == ':'){
                         register(TokenType.COLON, String.valueOf(j));
+                    } else if (j == '='){
+                        register(TokenType.EQUAL, String.valueOf(j));
                     }
 
                 } else if ("+-*/%".indexOf(j) != -1) {

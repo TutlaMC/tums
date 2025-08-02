@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan;
 
+import it.unimi.dsi.fastutil.Hash;
 import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
@@ -155,9 +156,18 @@ public class Utils {
     }
 
     public static Types getTypeOfValue(Object value){
-        value = value.getClass();
         if (value instanceof Integer || value instanceof Double) {
             return Types.NUMBER;
+        } else if (value instanceof String ){
+            return Types.STRING;
+        } else if (value instanceof Boolean ){
+            return Types.BOOL;
+        } else if (value instanceof List || value instanceof ArrayList<?>){
+            return Types.LIST;
+        } else if (value instanceof Map){
+            return Types.TSON;
+        } else if (value == null ){
+            return Types.NOTHING;
         } else {
             return null;
         }

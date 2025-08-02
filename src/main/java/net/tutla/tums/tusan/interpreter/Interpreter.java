@@ -1,9 +1,5 @@
 package net.tutla.tums.tusan.interpreter;
 
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +24,7 @@ public class Interpreter {
     public String file;
     public List<Token> tokens;
     public Object returned;
+    public Boolean isFunction = false;
 
     private Path filePath;
 
@@ -80,7 +77,9 @@ public class Interpreter {
             System.out.print(t.value);
             System.out.print("\n");
         } */
-        System.out.println("================ OUTPUT ===============");
+        if (!isFunction){
+            System.out.println("================ OUTPUT ===============");
+        }
         while (pos <= tokens.toArray().length-1){
             if (end){
                 return returned;
@@ -88,7 +87,7 @@ public class Interpreter {
             if (currentToken.type == TokenType.ENDSCRIPT){ // how did you get here?
                 return returned;
             } else if (currentToken.type == TokenType.BREAKSTRUCTURE && currentToken.value.equals("return")){
-                this.returned = new Return(currentToken).create();
+                new Return(nextToken()).create();
             } else {
                 new Statement(currentToken).create();
             }
@@ -248,7 +247,9 @@ public class Interpreter {
 
     public void meetEnd(){
         this.end = true;
-        System.out.println("=======================================");
+        if (!isFunction){
+            System.out.println("=======================================");
+        }
         // System.exit(0);
     }
 

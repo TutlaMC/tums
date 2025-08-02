@@ -55,6 +55,8 @@ public class Statement extends Node {
             } else {
                 interpreter.error("UnexpectedToken", "Expected valid statement got "+token.type.name()+":"+token.value, null);
             }
+        } else if (token.type == TokenType.BREAKSTRUCTURE && token.value.equals("return")){
+            new Return(token).create();
         } else {
             interpreter.error("UnexpectedToken", "Expected valid statement got "+token.type.name()+":"+token.value, null);
         }

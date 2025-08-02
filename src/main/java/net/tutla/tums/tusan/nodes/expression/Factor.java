@@ -83,7 +83,7 @@ public class Factor extends Node {
             } else if (interpreter.data.vars.containsKey(token.value)){
                 value = new Name(token).create().value;
             } else if (interpreter.data.funcs.containsKey(token.value)){
-                new ExecuteFunction(token).create();
+                value = new ExecuteFunction(token).create().value;
             } else {
                 interpreter.error("UndefinedVariable",token.value+" was not defined", null);
             }
@@ -123,7 +123,7 @@ public class Factor extends Node {
         }
 
         if ((value instanceof String || value instanceof ArrayList || value instanceof HashMap) && interpreter.getNextToken().type == TokenType.LEFT_SQUARE){
-            // wip, should add indexing similar to native tusan
+            // TODO should add indexing similar to native tusan
         }
 
 

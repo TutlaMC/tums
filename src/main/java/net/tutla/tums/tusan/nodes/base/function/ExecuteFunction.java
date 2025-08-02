@@ -33,6 +33,7 @@ public class ExecuteFunction extends Node {
         for (FunctionParameter parameter : parameters){ // checking the required ones
             if (parameter.required){
                 Object val = new Expression(interpreter.nextToken()).create().value;
+
                 if (parameter.type != Types.ANY){
                     Types valType = Utils.getTypeOfValue(val);
                     if (valType != parameter.type){
@@ -69,7 +70,10 @@ public class ExecuteFunction extends Node {
 
         interpreter.expectTokenType(TokenType.RIGHT_PAR);
         functionInterpreter.changeTokensParent(functionInterpreter);
+        functionInterpreter.isFunction = true;
         functionInterpreter.compile();
+
+        value = functionInterpreter.returned;
 
         return this;
     }

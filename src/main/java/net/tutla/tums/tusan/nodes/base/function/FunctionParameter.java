@@ -17,6 +17,7 @@ public class FunctionParameter {
 
     public void setFallback(Object fallback){
         this.fallback = fallback;
+        this.required = false;
     }
 
     public void setRequired(Boolean required){
