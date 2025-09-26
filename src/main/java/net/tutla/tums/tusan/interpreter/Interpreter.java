@@ -182,8 +182,8 @@ public class Interpreter {
             System.out.println(name+" : "+detail);
             System.out.println("============== POSITION ===============");
             System.out.println(arrowsAtPosition());
-            System.out.println("================ NOTES ================");
             if (notes != null){
+                System.out.println("================ NOTES ================");
                 for (String note : notes){
                     System.out.println(note);
                 }

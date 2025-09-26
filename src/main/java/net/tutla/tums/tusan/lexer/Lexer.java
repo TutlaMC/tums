@@ -7,6 +7,8 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Lexer {
 
@@ -19,9 +21,9 @@ public class Lexer {
 
     // Keyword Definitions
 
-    public final List<String> structures = Arrays.asList("if","on","loop","while","on", "function");
+    public final List<String> structures = Arrays.asList("if","on","loop","while", "function");
     public final List<String> effects = Arrays.asList("print", "set", "wait");
-    public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all", "that");
+    public final List<String> keywords = Arrays.asList("of", "else", "elseif", "then", "to", "do", "as", "times", "items", "characters", "all");
     public final List<String> timeReprs = Arrays.asList("milliseconds","seconds","minutes","hours","days","weeks","months","years","millisecond","second","minute","hour","day","week","month","year");
     public final List<String> types = Utils.getTypeNames();
 
@@ -38,147 +40,89 @@ public class Lexer {
         currentToken.setLength(0);
     }
 
-    public List<Token> classify() {
-        String[] symbols = {"(", ")", "{", "}", "[", "]", ",", ";", ":","="};
-        for (String sym : symbols){
-            text = text.replace(sym, " " + sym + " ");
+    record Rule(TokenType type, String regex) {}
+
+    private static final List<Rule> RULES = List.of(
+            new Rule(TokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
+            new Rule(TokenType.NUMBER, "\\d+(\\.\\d+)?"),
+            new Rule(TokenType.BOOL, "\\b(true|false)\\b"),
+            new Rule(TokenType.NOTHING, "\\bnothing\\b"),
+
+            new Rule(TokenType.OPERATOR, "[+\\-*/%]"),
+            new Rule(TokenType.LOGIC, "(?:\\b(?:and|or|not|contains|in)\\b|\\|\\||&&)"),
+            new Rule(TokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"), // ← Fixed name
+            new Rule(TokenType.EQUAL, "="),
+
+            new Rule(TokenType.LEFT_CURLY, "\\{"),
+            new Rule(TokenType.RIGHT_CURLY, "\\}"),
+            new Rule(TokenType.LEFT_PAR, "\\("),
+            new Rule(TokenType.RIGHT_PAR, "\\)"),
+            new Rule(TokenType.LEFT_SQUARE, "\\["),
+            new Rule(TokenType.RIGHT_SQUARE, "\\]"),
+            new Rule(TokenType.SEMICOLON, ";"),
+            new Rule(TokenType.COLON, ":"),
+            new Rule(TokenType.COMMA, ",")
+    );
+
+    private static final Pattern MASTER;
+
+    static {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < RULES.size(); i++) {
+            Rule rule = RULES.get(i);
+            if (sb.length() > 0) sb.append("|");
+            // Use index-based naming to avoid any naming issues
+            sb.append("(?<G").append(i).append(">(?:").append(rule.regex()).append("))");
         }
-        text = text.replace("'s ", " 's ") + "\n";
-        text = text.replace("'s ", " 's ") + "\n";
 
-        boolean inString = false;
-        boolean inComment = false;
-        boolean inNumber = false;
-        String startQuoteType = "";
+        sb.append("|(?<IDENTIFIER>[A-Za-z_][A-Za-z0-9_]*)");
+        sb.append("|(?<WHITESPACE>[ \\t\\r\\n]+)");
+        MASTER = Pattern.compile(sb.toString());
+    }
 
+    public List<Token> classify() {
+        Matcher matcher = MASTER.matcher(text);
 
-        while (pos < text.length()) {
-            char j = text.charAt(pos);
-
-            if (inString) { // string checking thing, i yoinked the code for tusan so its pretty shit so it's not worth touching
-                if (String.valueOf(j).equals(startQuoteType)) {
-                    inString = false;
-                    register(TokenType.STRING, currentToken.toString().replace("\\n", "\n"));
-                } else {
-                    if (startQuoteType.equals("'") && currentToken.toString().equals("s ")) {
-                        inString = false;
-                        register(TokenType.PROPERTY, "'s ");
-                    }
-                    currentToken.append(j);
-                }
-
-            } else if (inComment) {
-                if (j == '\n') {
-                    inComment = false;
-                    currentToken.setLength(0);
-                }
-
-            } else if (inNumber) {
-                if (Character.isDigit(j) || j == '.') {
-                    currentToken.append(j);
-                } else if ("+-*/%".indexOf(j) != -1) {
-                    inNumber = false;
-                    register(TokenType.NUMBER, currentToken.toString());
-                    pos--;
-                } else if (Character.isWhitespace(j)) {
-                    inNumber = false;
-                    register(TokenType.NUMBER, currentToken.toString());
-                }
-
-            } else {
-                if ("(){}[],;:=".indexOf(j) != -1) {
-                    if (j == '('){
-                        register(TokenType.LEFT_PAR, String.valueOf(j));
-                    } else  if (j == ')'){
-                        register(TokenType.RIGHT_PAR, String.valueOf(j));
-                    } else if (j == '{'){
-                        register(TokenType.LEFT_CURLY, String.valueOf(j));
-                    } else if (j == '}'){
-                        register(TokenType.RIGHT_CURLY, String.valueOf(j));
-                    } else if (j == '['){
-                        register(TokenType.LEFT_SQUARE, String.valueOf(j));
-                    } else if (j == ']'){
-                        register(TokenType.RIGHT_SQUARE, String.valueOf(j));
-                    } else if (j == ','){
-                        register(TokenType.COMMA, String.valueOf(j));
-                    } else if (j == ';'){
-                        register(TokenType.SEMICOLON, String.valueOf(j));
-                    } else if (j == ':'){
-                        register(TokenType.COLON, String.valueOf(j));
-                    } else if (j == '='){
-                        register(TokenType.EQUAL, String.valueOf(j));
-                    }
-
-                } else if ("+-*/%".indexOf(j) != -1) {
-                    if (pos + 1 < text.length() && Character.isDigit(text.charAt(pos + 1)) && (pos == 0 || !Character.isDigit(text.charAt(pos - 1)))) {
-                        currentToken.setLength(0);
-                        currentToken.append(j);
-                        inNumber = true;
-                    } else {
-                        register(TokenType.OPERATOR, String.valueOf(j));
-                    }
-
-                } else if (j == '#') {
-                    inComment = true;
-                    currentToken.setLength(0);
-                } else if (j == '\'' || j == '"') {
-                    inString = true;
-                    startQuoteType = String.valueOf(j);
-                    currentToken.setLength(0);
-                } else if (Character.isDigit(j)) {
-                    inNumber = true;
-                    currentToken.setLength(0);
-                    currentToken.append(j);
-
-                } else if (Character.isWhitespace(j) || pos == text.length() - 1) {
-                    if (pos == text.length() - 1 && !Character.isWhitespace(j)) {
-                        currentToken.append(j);
-                    }
-
-                    String tok = currentToken.toString().trim();
-                    if (!tok.isEmpty()) {
-                        if (tok.matches("\\d+(\\.\\d+)?")) {
-                            register(TokenType.NUMBER, tok);
-                        } else if (tok.equals("true") || tok.equals("false")) {
-                            register(TokenType.BOOL, tok);
-                        } else if (tok.equals("=")){
-                            register(TokenType.EQUAL, tok);
-                        } else if (Arrays.asList("and","or","not","contains","in","||","&&").contains(tok)){
-                            register(TokenType.LOGIC, tok);
-                        } else if (Arrays.asList(">","<","<=",">=","==","!=","is").contains(tok)){
-                            register(TokenType.COMPARISION, tok);
-                        } else if (tok.equals("nothing")) {
-                            register(TokenType.NOTHING, tok);
-                        } else if (types.contains(tok)) {
-                            register(TokenType.TYPE, tok);
-                        } else if (Arrays.asList("return", "break").contains(tok)) {
-                            register(TokenType.BREAKSTRUCTURE, tok);
-                        } else if (keywords.contains(tok)) {
-                            register(TokenType.KEYWORD, tok);
-                        } else if (effects.contains(tok)) {
-                            register(TokenType.EFFECT, tok);
-                        } else if (structures.contains(tok)) {
-                            register(TokenType.STRUCTURE, tok);
-                        } else if (tok.equals("end")) {
-                            register(TokenType.ENDSTRUCTURE, tok);
-                        } else if (Utils.isEventType(tok)) {
-                            register(TokenType.EVENT, tok);
-                        } else if (timeReprs.contains(tok)) {
-                            if (tok.endsWith("s")){
-                                tok = tok.substring(0, tok.length() - 1);
-                            }
-                            register(TokenType.TIME, tok);
-                        } else {
-                            register(TokenType.IDENTIFIER, tok);
-                        }
-                    }
-                    currentToken.setLength(0);
-
-                } else {
-                    currentToken.append(j);
+        while (matcher.find()) {
+            boolean matched = false;
+            for (int i = 0; i < RULES.size(); i++) {
+                Rule rule = RULES.get(i);
+                if (matcher.group("G" + i) != null) {
+                    String value = matcher.group("G" + i);
+                    register(rule.type(), value);
+                    matched = true;
+                    break;
                 }
             }
-            pos++;
+
+            if (!matched) {
+                if (matcher.group("IDENTIFIER") != null) {
+                    String value = matcher.group("IDENTIFIER");
+
+                    if (keywords.contains(value)) {
+                        register(TokenType.KEYWORD, value);
+                    } else if (effects.contains(value)) {
+                        register(TokenType.EFFECT, value);
+                    } else if (structures.contains(value)) {
+                        register(TokenType.STRUCTURE, value);
+                    } else if (value.equals("end")) {
+                        register(TokenType.ENDSTRUCTURE, value);
+                    } else if (Arrays.asList("return","break").contains(value)) {
+                        register(TokenType.BREAKSTRUCTURE, value);
+                    } else if (types != null && types.contains(value)) {
+                        register(TokenType.TYPE, value);
+                    } else if (Utils.isEventType(value)) {
+                        register(TokenType.EVENT, value);
+                    } else if (timeReprs.contains(value)) {
+                        String timeValue = value.endsWith("s") ?
+                                value.substring(0, value.length() - 1) : value;
+                        register(TokenType.TIME, timeValue);
+                    } else {
+                        register(TokenType.IDENTIFIER, value);
+                    }
+                } else if (matcher.group("WHITESPACE") != null) {
+                }
+            }
         }
 
         register(TokenType.ENDSCRIPT, "");

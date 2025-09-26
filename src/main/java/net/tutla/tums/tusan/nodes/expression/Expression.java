@@ -17,7 +17,7 @@ public class Expression extends Node {
     public Expression create(){
 
         Term term1 = new Term(token).create();
-        if (Arrays.asList(TokenType.OPERATOR, TokenType.COMPARISION).contains(interpreter.getNextToken().type)){
+        if (Arrays.asList(TokenType.OPERATOR, TokenType.COMPARISON).contains(interpreter.getNextToken().type)){
             Token op = interpreter.nextToken();
             Expression term2 = new Expression(interpreter.nextToken()).create();
             if (op.type == TokenType.OPERATOR){
@@ -31,7 +31,7 @@ public class Expression extends Node {
                 } else if (Objects.equals(op.value, "-")) {
                     value = (Double) term1.value - (Double) term2.value;
                 }
-            } else if (op.type == TokenType.COMPARISION){
+            } else if (op.type == TokenType.COMPARISON){
                 if (Objects.equals(op.value, "<")){
                     value = (Double) term1.value < (Double) term2.value;
                 } else if (Objects.equals(op.value, ">")) {

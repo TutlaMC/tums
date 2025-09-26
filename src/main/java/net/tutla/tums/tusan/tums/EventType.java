@@ -7,7 +7,7 @@ public enum EventType {
     RIGHT_CLICK,
     RIGHT_RELEASE,
     MIDDLE_CLICK,
-    MIDDILE_RELEASE,
+    MIDDLE_RELEASE,
     SCROLL_UP,
     SCROLL_DOWN,
 

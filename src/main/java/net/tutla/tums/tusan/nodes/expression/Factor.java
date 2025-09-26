@@ -32,7 +32,7 @@ public class Factor extends Node {
             this.value = Double.parseDouble(token.value);
             if (interpreter.getNextToken().type == TokenType.TIME){
                 HashMap<String, Double> timeUnits = new HashMap<>();
-                timeUnits.put("milisecond", 0.001);
+                timeUnits.put("millisecond", 0.001);
                 timeUnits.put("second", 1.0);
                 timeUnits.put("minute", 60.0);
                 timeUnits.put("hour", 3600.0);
@@ -89,6 +89,7 @@ public class Factor extends Node {
             }
         } else if (token.type == TokenType.LEFT_PAR) {
             value = new Expression(interpreter.nextToken()).create().value;
+            interpreter.expectTokenType(TokenType.RIGHT_PAR);
         } else if (token.type == TokenType.LEFT_CURLY){ // TSON :fire: (Tutla's Object Notation or Tutla's Shitty Object Notation)
             HashMap<String, Object> dict = new HashMap<>();
             while (interpreter.getNextToken().type != TokenType.RIGHT_CURLY){

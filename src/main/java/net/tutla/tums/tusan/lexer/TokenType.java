@@ -12,7 +12,7 @@ public enum TokenType {
     PROPERTY,
     OPERATOR,
     LOGIC,
-    COMPARISION,
+    COMPARISON,
     EQUAL,
 
     IDENTIFIER, // undefined keywords basically

@@ -51,7 +51,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
             parameters.add(parameter);
         }
         interpreter.expectTokenType(TokenType.RIGHT_PAR);
-        interpreter.expectToken(TokenType.KEYWORD, "that");
+        interpreter.expectTokenType(TokenType.COLON);
 
         List<Token> tokens = new ArrayList<>();
         int structures = 0;
