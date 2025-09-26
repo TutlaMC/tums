@@ -1,7 +1,6 @@
 package net.tutla.tums;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.ActionResult;
@@ -10,14 +9,12 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class Tums implements ModInitializer {
     public static InterpreterRegistry register = new InterpreterRegistry();
 
-    public InterpreterRegistry getRegister(){
+    public static InterpreterRegistry getRegister(){
         return register;
     }
 
