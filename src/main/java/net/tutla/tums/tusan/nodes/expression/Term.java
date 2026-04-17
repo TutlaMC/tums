@@ -15,11 +15,11 @@ public class Term extends Node {
 
     public Term create(){
         Factor term1 = new Factor(token).create();
-        if (interpreter.getNextToken().type == TokenType.OPERATOR){
-            Token op = interpreter.getNextToken();
+        if (interpreter.tokenManager.getNextToken().type == TokenType.OPERATOR){
+            Token op = interpreter.tokenManager.getNextToken();
             if (Arrays.asList("*","/","**","^").contains(op.value)){
-                interpreter.nextToken();
-                Expression term2 = new Expression(interpreter.nextToken()).create();
+                interpreter.tokenManager.nextToken();
+                Expression term2 = new Expression(interpreter.tokenManager.nextToken()).create();
 
                 if (Objects.equals(op.value, "*")){
                     if (term1.value instanceof String && term2.value instanceof Double){

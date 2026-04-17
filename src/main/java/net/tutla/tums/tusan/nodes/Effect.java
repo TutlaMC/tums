@@ -15,7 +15,7 @@ public class Effect extends Node {
     }
     public Effect create(){
         if (token.value.equals("print")){
-            new Print(interpreter.nextToken()).create();
+            new Print(interpreter.tokenManager.nextToken()).create();
         } else if (token.value.equals("set")) {
             new Set(token).create();
         } else if (token.value.equals("wait")){

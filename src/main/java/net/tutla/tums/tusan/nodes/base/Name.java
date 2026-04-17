@@ -19,15 +19,15 @@ public class Name extends Node {
 
     public Name create() {
         name = token.value;
-        if (interpreter.getNextToken().type == TokenType.PROPERTY) {
+        if (interpreter.tokenManager.getNextToken().type == TokenType.PROPERTY) {
             location = ((Variable) location.get(name)).properties;
-            while (interpreter.getNextToken().type == TokenType.PROPERTY) {
-                interpreter.nextToken();
-                name = interpreter.nextToken().value;
+            while (interpreter.tokenManager.getNextToken().type == TokenType.PROPERTY) {
+                interpreter.tokenManager.nextToken();
+                name = interpreter.tokenManager.nextToken().value;
 
                 if (!location.containsKey(name)) break;
 
-                if (interpreter.getNextToken().type == TokenType.PROPERTY) {
+                if (interpreter.tokenManager.getNextToken().type == TokenType.PROPERTY) {
                     location = ((Variable) location.get(name)).properties;
                 } else {
                     break;

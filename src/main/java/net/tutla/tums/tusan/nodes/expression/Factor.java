@@ -22,15 +22,15 @@ public class Factor extends Node {
     public Factor create(){
         value = token.value;
         if (token.type == TokenType.OPERATOR && token.value == "-"){
-            if (interpreter.getNextToken().type == TokenType.NUMBER){
-                String e = interpreter.nextToken().value;
+            if (interpreter.tokenManager.getNextToken().type == TokenType.NUMBER){
+                String e = interpreter.tokenManager.nextToken().value;
                 interpreter.currentToken = new Token(TokenType.NUMBER, "-"+e, interpreter);
                 token = interpreter.currentToken;
             }
         }
         if (token.type == TokenType.NUMBER){
             this.value = Double.parseDouble(token.value);
-            if (interpreter.getNextToken().type == TokenType.TIME){
+            if (interpreter.tokenManager.getNextToken().type == TokenType.TIME){
                 HashMap<String, Double> timeUnits = new HashMap<>();
                 timeUnits.put("millisecond", 0.001);
                 timeUnits.put("second", 1.0);
@@ -41,7 +41,7 @@ public class Factor extends Node {
                 timeUnits.put("month", 2592000.0);
                 timeUnits.put("year", 31536000.0);
 
-                value = (Double) value*timeUnits.get(interpreter.nextToken().value);
+                value = (Double) value*timeUnits.get(interpreter.tokenManager.nextToken().value);
             }
         } else if (token.type == TokenType.STRING){
             value = token.value;
@@ -68,9 +68,9 @@ public class Factor extends Node {
             if (ordn != null){
                 int n = ((Double) ordn).intValue();
                 n--;
-                interpreter.expectTokenClassic("KEYWORD:character|KEYWORD:item");
-                interpreter.expectToken(TokenType.LOGIC, "in");
-                Object list = new Factor(interpreter.nextToken()).create().value;
+                interpreter.tokenManager.expectTokenClassic("KEYWORD:character|KEYWORD:item");
+                interpreter.tokenManager.expectToken(TokenType.LOGIC, "in");
+                Object list = new Factor(interpreter.tokenManager.nextToken()).create().value;
                 if (list instanceof List) {
                     value = ((List<Object>) list).get(n);
                 } else if (list instanceof Map) {
@@ -88,42 +88,42 @@ public class Factor extends Node {
                 interpreter.error("UndefinedVariable",token.value+" was not defined", null);
             }
         } else if (token.type == TokenType.LEFT_PAR) {
-            value = new Expression(interpreter.nextToken()).create().value;
-            interpreter.expectTokenType(TokenType.RIGHT_PAR);
+            value = new Expression(interpreter.tokenManager.nextToken()).create().value;
+            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_PAR);
         } else if (token.type == TokenType.LEFT_CURLY){ // TSON :fire: (Tutla's Object Notation or Tutla's Shitty Object Notation)
             HashMap<String, Object> dict = new HashMap<>();
-            while (interpreter.getNextToken().type != TokenType.RIGHT_CURLY){
-                Token e = interpreter.nextToken();
+            while (interpreter.tokenManager.getNextToken().type != TokenType.RIGHT_CURLY){
+                Token e = interpreter.tokenManager.nextToken();
                 if (e.type == TokenType.STRING){
                     String key = e.value;
-                    interpreter.expectTokenType(TokenType.COLON);
-                    Object val = new Expression(interpreter.nextToken()).create().value;
+                    interpreter.tokenManager.expectTokenType(TokenType.COLON);
+                    Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
                     dict.put(key, val);
                 }
-                if (interpreter.getNextToken().type == TokenType.COMMA){
-                    interpreter.nextToken();
+                if (interpreter.tokenManager.getNextToken().type == TokenType.COMMA){
+                    interpreter.tokenManager.nextToken();
                 }
             }
-            interpreter.expectTokenType(TokenType.RIGHT_CURLY);
+            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_CURLY);
             value = dict;
         } else if (token.type == TokenType.LEFT_SQUARE){
             List<Object> list = new ArrayList<>();
-            while (interpreter.getNextToken().type != TokenType.RIGHT_SQUARE){
-                list.add(new Expression(interpreter.nextToken()).create().value);
-                if (interpreter.getNextToken().type != TokenType.COMMA && interpreter.getNextToken().type != TokenType.RIGHT_SQUARE){
+            while (interpreter.tokenManager.getNextToken().type != TokenType.RIGHT_SQUARE){
+                list.add(new Expression(interpreter.tokenManager.nextToken()).create().value);
+                if (interpreter.tokenManager.getNextToken().type != TokenType.COMMA && interpreter.tokenManager.getNextToken().type != TokenType.RIGHT_SQUARE){
                     interpreter.error("InvalidList", "Invalid list, seperate items using a comma and close it in a square bracket", null);
                 }
-                if (interpreter.getNextToken().type == TokenType.COMMA){
-                    interpreter.nextToken();
+                if (interpreter.tokenManager.getNextToken().type == TokenType.COMMA){
+                    interpreter.tokenManager.nextToken();
                 }
             }
-            interpreter.expectTokenType(TokenType.RIGHT_SQUARE);
+            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_SQUARE);
             value = list;
         } else {
             interpreter.error("InvalidFactor",value.toString()+" is not a valid factor",null);
         }
 
-        if ((value instanceof String || value instanceof ArrayList || value instanceof HashMap) && interpreter.getNextToken().type == TokenType.LEFT_SQUARE){
+        if ((value instanceof String || value instanceof ArrayList || value instanceof HashMap) && interpreter.tokenManager.getNextToken().type == TokenType.LEFT_SQUARE){
             // TODO should add indexing similar to native tusan
         }
 

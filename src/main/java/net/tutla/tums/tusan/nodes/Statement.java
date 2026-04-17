@@ -27,8 +27,8 @@ public class Statement extends Node {
         }
 
         if (token.type == TokenType.LEFT_CURLY){
-            new Statement(interpreter.nextToken()).create();
-            interpreter.expectTokenType(TokenType.RIGHT_CURLY);
+            new Statement(interpreter.tokenManager.nextToken()).create();
+            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_CURLY);
             return value;
         }
         if (validTypes.contains(token.type)){
@@ -36,15 +36,15 @@ public class Statement extends Node {
                 value = new Effect(token).create();
             } else if (token.type == TokenType.STRUCTURE){
                 if (token.value.equals("if")){
-                    new If(interpreter.nextToken()).create();
+                    new If(interpreter.tokenManager.nextToken()).create();
                 } else if (token.value.equals("while")) {
-                    new While(interpreter.nextToken()).create();
+                    new While(interpreter.tokenManager.nextToken()).create();
                 } else if (token.value.equals("loop")) {
-                    new Loop(interpreter.nextToken()).create();
+                    new Loop(interpreter.tokenManager.nextToken()).create();
                 } else if (token.value.equals("on")) {
                     new On(token).create();
                 } else if (token.value.equals("function")) {
-                    new FunctionNode(interpreter.nextToken()).create();
+                    new FunctionNode(interpreter.tokenManager.nextToken()).create();
                 } else {
                     interpreter.error("UnexpectedToken", "Structure "+token.type.name()+":"+token.value+" has no definition", null);
                 }

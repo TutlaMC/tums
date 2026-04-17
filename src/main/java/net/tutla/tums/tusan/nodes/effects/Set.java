@@ -18,24 +18,24 @@ public class Set extends Node {
     }
 
     public Set create(){
-        Token name = interpreter.nextToken();
+        Token name = interpreter.tokenManager.nextToken();
         Object num = utils.isOrdinal(name);
         if (num != null){ // TODO: this code is fucked so like ill fix it later
             int n = ((Double) num).intValue();
             n--;
-            interpreter.expectTokenClassic("KEYWORD:item|KEYWORD:character");
-            interpreter.expectToken(TokenType.LOGIC,"in");
+            interpreter.tokenManager.expectTokenClassic("KEYWORD:item|KEYWORD:character");
+            interpreter.tokenManager.expectToken(TokenType.LOGIC,"in");
             Object val;
-            if (interpreter.getNextToken().type == TokenType.IDENTIFIER){
-                Name e = new Name(interpreter.nextToken()).create();
+            if (interpreter.tokenManager.getNextToken().type == TokenType.IDENTIFIER){
+                Name e = new Name(interpreter.tokenManager.nextToken()).create();
                 val = Name.name;
             } else {
-                Object e = new Expression(interpreter.nextToken());
+                Object e = new Expression(interpreter.tokenManager.nextToken());
                 val = e;
             }
-            interpreter.expectToken(TokenType.KEYWORD,"to");
+            interpreter.tokenManager.expectToken(TokenType.KEYWORD,"to");
 
-            Object exprValue = new Expression(interpreter.nextToken()).create().value;
+            Object exprValue = new Expression(interpreter.tokenManager.nextToken()).create().value;
 
             if (val instanceof List) {
                 ((List<Object>) val).set(n, exprValue);
@@ -44,8 +44,8 @@ public class Set extends Node {
             }
         } else {
             Name n = new Name(name).create();
-            interpreter.expectToken(TokenType.KEYWORD,"to");
-            Object val = new Expression(interpreter.nextToken()).create().value;
+            interpreter.tokenManager.expectToken(TokenType.KEYWORD,"to");
+            Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
             if (val instanceof Variable){
                 ((Variable) val).name = n.name;
                 n.location.put(n.name, val);

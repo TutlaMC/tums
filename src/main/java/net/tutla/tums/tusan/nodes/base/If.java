@@ -21,28 +21,28 @@ public class If extends Node {
 
     public If create(){
         this.condition = new Condition(token).create();
-        interpreter.expectToken(TokenType.KEYWORD, "then");
+        interpreter.tokenManager.expectToken(TokenType.KEYWORD, "then");
 
         Boolean runIf = condition.value;
-        Boolean runElse = false;
+        boolean runElse = false;
 
         while (!end){
-            Token nxt = interpreter.getNextToken();
+            Token nxt = interpreter.tokenManager.getNextToken();
             if (nxt.type==TokenType.ENDSTRUCTURE){
                 if (structures == 0){
-                    interpreter.nextToken();
+                    interpreter.tokenManager.nextToken();
                     end = true;
                     break;
                 } else {
                     structures--;
-                    interpreter.nextToken();
+                    interpreter.tokenManager.nextToken();
                 }
             } else if ((nxt.type == TokenType.KEYWORD && nxt.value.equals("elseif")) && structures == 0) {
-                interpreter.nextToken();
+                interpreter.tokenManager.nextToken();
                 if (runIf == false){
-                    condition = new Condition(interpreter.nextToken()).create();
+                    condition = new Condition(interpreter.tokenManager.nextToken()).create();
                     if (condition.value){
-                        interpreter.expectToken(TokenType.KEYWORD, "then");
+                        interpreter.tokenManager.expectToken(TokenType.KEYWORD, "then");
                         runIf = true;
                         runElse = false;
                         success = true;
@@ -56,7 +56,7 @@ public class If extends Node {
                     runElse = false;
                 }
             } else if((nxt.type == TokenType.KEYWORD && nxt.value.equals("else")) && structures == 0){
-                interpreter.nextToken();
+                interpreter.tokenManager.nextToken();
                 if (runIf == false && success == false){
                     runElse = true;
                 } else {
@@ -65,7 +65,7 @@ public class If extends Node {
                     success = true;
                 }
             } else {
-                Token e = interpreter.nextToken();
+                Token e = interpreter.tokenManager.nextToken();
 
                 if (runIf == true || runElse){
                     new Statement(e).create();

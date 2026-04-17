@@ -21,9 +21,9 @@ public class Condition extends Node {
     public Condition create(){
         value = true;
         Expression expr1 = new Expression(token).create();
-        if (interpreter.getNextToken().type == TokenType.LOGIC){
-            String operator = interpreter.nextToken().value;
-            Expression expr2 = new Expression(interpreter.nextToken()).create();
+        if (interpreter.tokenManager.getNextToken().type == TokenType.LOGIC){
+            String operator = interpreter.tokenManager.nextToken().value;
+            Expression expr2 = new Expression(interpreter.tokenManager.nextToken()).create();
             if (operator.equals("and") || operator.equals("&&")){
                 if ((Boolean) expr1.value && (Boolean) expr2.value){
                     value = true;

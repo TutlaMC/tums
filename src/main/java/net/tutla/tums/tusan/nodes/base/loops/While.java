@@ -24,7 +24,7 @@ public class While extends Node {
         boolean fned = false;
         int structures = 0;
         while (!fned){
-            Token nxt = interpreter.nextToken();
+            Token nxt = interpreter.tokenManager.nextToken();
             if (nxt.type==TokenType.ENDSTRUCTURE){
                 if (structures == 0){
                     endPos = interpreter.pos;
@@ -35,14 +35,14 @@ public class While extends Node {
             } else if (nxt.type == TokenType.STRUCTURE) {
                 structures++;
             } else {
-                interpreter.nextToken();
+                interpreter.tokenManager.nextToken();
             }
         }
         interpreter.pos = currentPos;
         check();
 
         while (cond){
-            Token nxt = interpreter.nextToken();
+            Token nxt = interpreter.tokenManager.nextToken();
             if (nxt.type==TokenType.ENDSTRUCTURE){
                 if (structures == 0){
                     check();
@@ -63,7 +63,7 @@ public class While extends Node {
     public void check(){
         interpreter.pos = currentPos;
         Condition condition = new Condition(token).create();
-        interpreter.expectToken(TokenType.KEYWORD, "do");
+        interpreter.tokenManager.expectToken(TokenType.KEYWORD, "do");
         cond = condition.value;
     }
 }

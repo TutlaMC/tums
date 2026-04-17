@@ -52,7 +52,7 @@ public class TumsClient implements ClientModInitializer {
         });
 
         AttackEntityCallback.EVENT.register((player, world, hand, target, hitResult) -> {
-            if (world.isClient) {
+            if (world.isClient()) {
                 HashMap<String, Object> variables = new HashMap<>();
                 if (target instanceof PlayerEntity otherPlayer) {
                     variables.put("event_player", new TumsPlayer("event_player", otherPlayer));

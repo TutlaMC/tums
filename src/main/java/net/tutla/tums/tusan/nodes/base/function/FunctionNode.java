@@ -4,6 +4,7 @@ import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
+import net.tutla.tums.tusan.interpreter.TokenManager;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
@@ -24,21 +25,21 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
     public FunctionNode create(){
         Boolean paramChecks = false; // checking optional parameters
 
-        interpreter.expectTokenType(TokenType.LEFT_PAR);
-        while (interpreter.getNextToken().type == TokenType.IDENTIFIER){
-            String parameterName = interpreter.nextToken().value;
+        interpreter.tokenManager.expectTokenType(TokenType.LEFT_PAR);
+        while (interpreter.tokenManager.getNextToken().type == TokenType.IDENTIFIER){
+            String parameterName = interpreter.tokenManager.nextToken().value;
             FunctionParameter parameter = new FunctionParameter(parameterName);
-            if (interpreter.getNextToken().type == TokenType.COLON){
-                interpreter.nextToken();
-                parameter.setType(Utils.getTypeFromName(interpreter.nextToken()));
+            if (interpreter.tokenManager.getNextToken().type == TokenType.COLON){
+                interpreter.tokenManager.nextToken();
+                parameter.setType(Utils.getTypeFromName(interpreter.tokenManager.nextToken()));
             } else {
                 parameter.setType(Types.ANY);
             }
 
-            if (interpreter.getNextToken().type == TokenType.EQUAL){
+            if (interpreter.tokenManager.getNextToken().type == TokenType.EQUAL){
                 paramChecks = true;
-                interpreter.nextToken();
-                parameter.setFallback(new Expression(interpreter.nextToken()).create().value);
+                interpreter.tokenManager.nextToken();
+                parameter.setFallback(new Expression(interpreter.tokenManager.nextToken()).create().value);
             } else {
                 if (!paramChecks){
                     parameter.setFallback(null);
@@ -50,24 +51,24 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
 
             parameters.add(parameter);
         }
-        interpreter.expectTokenType(TokenType.RIGHT_PAR);
-        interpreter.expectTokenType(TokenType.COLON);
+        interpreter.tokenManager.expectTokenType(TokenType.RIGHT_PAR);
+        interpreter.tokenManager.expectTokenType(TokenType.COLON);
 
         List<Token> tokens = new ArrayList<>();
         int structures = 0;
 
-        Token nextToken = interpreter.getNextToken();
+        Token nextToken = interpreter.tokenManager.getNextToken();
         if (nextToken == null){
             interpreter.error("SyntaxError", "Unexpected end of file in function definition", Arrays.asList("Make sure your function has an 'end' token"));
             return this;
         }
 
         if (nextToken.type == TokenType.ENDSTRUCTURE){
-            interpreter.nextToken();
+            interpreter.tokenManager.nextToken();
             tokens.add(new Token(TokenType.ENDSCRIPT, "", interpreter));
         } else {
             while (true){
-                nextToken = interpreter.nextToken();
+                nextToken = interpreter.tokenManager.nextToken();
                 if (nextToken == null){
                     interpreter.error("SyntaxError", "Unexpected end of file in function definition", Arrays.asList("Make sure your function has an 'end' token"));
                     return this;
@@ -90,8 +91,9 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
             }
         }
         tokens.add(new Token(TokenType.ENDSCRIPT, "function", interpreter));
-
-        functionInterpreter.setup(interpreter.data, tokens, null, null );
+        TokenManager e = new TokenManager(functionInterpreter);
+        e.setTokens(tokens);
+        functionInterpreter.setup(interpreter.data, e, null, null );
         interpreter.data.funcs.put(name, new FunctionRegistry(parameters, functionInterpreter));
 
         return this;

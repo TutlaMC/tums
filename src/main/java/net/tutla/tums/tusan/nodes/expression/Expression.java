@@ -17,9 +17,9 @@ public class Expression extends Node {
     public Expression create(){
 
         Term term1 = new Term(token).create();
-        if (Arrays.asList(TokenType.OPERATOR, TokenType.COMPARISON).contains(interpreter.getNextToken().type)){
-            Token op = interpreter.nextToken();
-            Expression term2 = new Expression(interpreter.nextToken()).create();
+        if (Arrays.asList(TokenType.OPERATOR, TokenType.COMPARISON).contains(interpreter.tokenManager.getNextToken().type)){
+            Token op = interpreter.tokenManager.nextToken();
+            Expression term2 = new Expression(interpreter.tokenManager.nextToken()).create();
             if (op.type == TokenType.OPERATOR){
                 if (Objects.equals(op.value, "+")){
                     if (term1.value instanceof String && term2.value instanceof String){
@@ -32,25 +32,25 @@ public class Expression extends Node {
                     value = (Double) term1.value - (Double) term2.value;
                 }
             } else if (op.type == TokenType.COMPARISON){
-                if (Objects.equals(op.value, "<")){
-                    value = (Double) term1.value < (Double) term2.value;
-                } else if (Objects.equals(op.value, ">")) {
-                    value = (Double) term1.value > (Double) term2.value;
-                } else if (Objects.equals(op.value, "<=")) {
-                    value = (Double) term1.value <= (Double) term2.value;
-                } else if (Objects.equals(op.value, ">=")) {
-                    value = (Double) term1.value >= (Double) term2.value;
-                } else if (Objects.equals(op.value, "!=")) {
-                    value = !(term1.value.equals(term2.value));
-                } else if (Objects.equals(op.value, "==") || Objects.equals(op.value, "is")) {
-                    value = term1.value.equals(term2.value);
-                } else {
-                    interpreter.error("InvalidComparison","Received invalid comparison "+op.value,null);
-                }
+                value = compare(op, term1, term2);
             }
         } else {
             value = term1.value;
         }
         return this;
+    }
+
+    private Object compare(Token op, Term term1, Expression term2){
+        switch (op.value) {
+            case "<" -> value = (Double) term1.value < (Double) term2.value;
+            case ">" -> value = (Double) term1.value > (Double) term2.value;
+            case "<=" -> value = (Double) term1.value <= (Double) term2.value;
+            case ">=" -> value = (Double) term1.value >= (Double) term2.value;
+            case "!=" -> value = !(term1.value.equals(term2.value));
+            case "==", "is" -> value = term1.value.equals(term2.value);
+            case null, default ->
+                    interpreter.error("InvalidComparison", "Received invalid comparison " + op.value, null);
+        }
+        return value;
     }
 }

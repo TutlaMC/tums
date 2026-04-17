@@ -1,13 +1,12 @@
 package net.tutla.tums.tusan.nodes.tums;
 
-import net.fabricmc.fabric.api.event.Event;
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.interpreter.Interpreter;
+import net.tutla.tums.tusan.interpreter.TokenManager;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class On extends Node {
@@ -19,13 +18,13 @@ public class On extends Node {
     }
 
     public On create(){
-        String eventOriginal = interpreter.expectTokenType(TokenType.EVENT).value.toUpperCase();
+        String eventOriginal = interpreter.tokenManager.expectTokenType(TokenType.EVENT).value.toUpperCase();
 
         if (interpreter.util.eventMappings.contains(eventOriginal)){
             Boolean end = false;
 
             while (!end){
-                Token nxt = interpreter.nextToken();
+                Token nxt = interpreter.tokenManager.nextToken();
                 if (nxt.type == TokenType.ENDSTRUCTURE){
                     if (structures == 0){
                         end = true;
@@ -43,7 +42,10 @@ public class On extends Node {
             }
             tokens.add(new Token(TokenType.ENDSCRIPT, "event", interpreter));
             Interpreter intr = new Interpreter();
-            intr.setup(interpreter.data, tokens, null, null);
+            TokenManager e = new TokenManager(intr);
+            e.setTokens(tokens);
+            intr.setup(interpreter.data,e,
+                    null, null);
             ((List) interpreter.data.events.get(eventOriginal)).add(intr);
 
         } else {

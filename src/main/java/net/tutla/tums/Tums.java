@@ -41,17 +41,11 @@ public class Tums implements ModInitializer {
                         } catch (Exception e){
                             e.printStackTrace();
                         }
-                        register.add(interpreter.data);
+                        register.add(interpreter.data); // why are we doing this?
                     });
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if (!world.isClient) {
-                System.out.println("Player used block: " + hitResult.getBlockPos());
-            }
-            return ActionResult.PASS;
-        });
     }
 }

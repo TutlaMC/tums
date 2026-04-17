@@ -3,10 +3,10 @@ package net.tutla.tums.tusan.interpreter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import net.tutla.tums.tusan.Tusan;
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Lexer;
 import net.tutla.tums.tusan.lexer.Token;
@@ -20,9 +20,10 @@ public class Interpreter {
     public Utils util = new Utils();
 
     public InterpreterData data;
+    public TokenManager tokenManager = new TokenManager(this);
+
     public String text;
     public String file;
-    public List<Token> tokens;
     public Object returned;
     public Boolean isFunction = false;
 
@@ -38,7 +39,7 @@ public class Interpreter {
 
     }
 
-    public void setup(InterpreterData data, List<Token> _tokens, String _text, Path file){
+    public void setup(InterpreterData data, TokenManager tknmanager, String _text, Path file){
         this.data = data != null ? data : new InterpreterData(null, null, null, null);
 
         if (_text != null) {
@@ -53,23 +54,23 @@ public class Interpreter {
             this.file = "<stdin>";
         }
 
-        if (_tokens == null){
+        if (tknmanager == null){
             lexer = new Lexer(this.text, this);
-            this.tokens = lexer.classify();
+            tokenManager.setTokens(lexer.classify());
         } else {
-            this.tokens = _tokens;
-            this.tokens = changeTokensParent(this);
+            tokenManager.setTokens(tknmanager.getAll());
+            tokenManager.changeTokensParent(this);
         }
 
-        this.currentToken = tokens.get(this.pos);
+        this.currentToken = tokenManager.get(this.pos);
     }
 
-    public Object compile() {
-        changeTokensParent(this);
+    public void compile() {
+        tokenManager.changeTokensParent(this);
         end = false;
         caughtError = false;
         pos = 0;
-        currentToken = tokens.get(pos);
+        currentToken = tokenManager.get(pos);
 
         /* for (Token t : tokens){
             System.out.print(t.type);
@@ -77,103 +78,15 @@ public class Interpreter {
             System.out.print(t.value);
             System.out.print("\n");
         } */
-        if (!isFunction){
-            System.out.println("================ OUTPUT ===============");
-        }
-        while (pos <= tokens.toArray().length-1){
-            if (end){
-                return returned;
-            }
-            if (currentToken.type == TokenType.ENDSCRIPT){ // how did you get here?
-                return returned;
-            } else if (currentToken.type == TokenType.BREAKSTRUCTURE && currentToken.value.equals("return")){
-                new Return(nextToken()).create();
-            } else {
-                new Statement(currentToken).create();
-            }
-            if (getNextToken() == null){
-                meetEnd();
-            } else {
-                Token e = nextToken();
-                if (e.type == TokenType.ENDSCRIPT){
-                    meetEnd();
-                }
-            }
 
-        }
-        meetEnd();
-
-        return returned;
+        Tusan test = new Tusan();
+        TusanContext ctx = new TusanContext(this);
+        test.compile(ctx);
     }
 
     // utils
 
-    public Token getNextToken(){
-        if (pos >= tokens.toArray().length-1){
-            return null;
-        } else {
-            return tokens.get(pos+1);
-        }
-    }
 
-    public Token nextToken(){
-        Token nxt = getNextToken();
-        if (nxt != null){
-            this.pos++;
-            currentToken = tokens.get(pos);
-            return nxt;
-        } else {
-            error("UnfinishedExpression", "Unfinished expression at ENDSCRIPT", null);
-        }
-        return null;
-    }
-
-    public Token expectTokenType(TokenType token){
-        Token nxt = nextToken();
-        if (nxt.type == token){
-            return nxt;
-        } else {
-            error("UnexpectedToken", "Expected "+token.name()+" got "+nxt.type.name(), null);
-            return null;
-        }
-    }
-
-    public Token expectToken(TokenType token, String name){
-        Token nxt = nextToken();
-        if (nxt.type == token && nxt.value.equals(name)){
-            return nxt;
-        } else {
-            error("UnexpectedToken", "Expected "+token.name()+":"+name+" got "+nxt.type.name()+":"+nxt.value, null);
-            return null;
-        }
-    }
-
-    public Token expectTokenClassic(String tokenTypes) {
-        String[] types = tokenTypes.replace(" ", "").split("\\|");
-        Token nextTkn = getNextToken();
-
-        for (String t : types) {
-            if (t.contains(":")) {
-                String expectedValue = t.split(":")[1];
-                if (expectedValue.equals(nextTkn.value)) {
-                    return nextToken();
-                }
-            } else {
-                if (nextTkn.type.toString().equalsIgnoreCase(t)) {
-                    return nextToken();
-                }
-            }
-        }
-
-        if (Arrays.asList(types).contains("IDENTIFIER")) {
-            error("UnexpectedToken", "Expected token " + Arrays.toString(types) + ", got " + nextTkn,
-                    List.of("Possible Fix: You might have entered a keyword as a variable name, try renaming it"));
-        } else {
-            error("UnexpectedToken", "Expected token " + Arrays.toString(types) + ", got " + nextTkn, null);
-        }
-
-        return null;
-    }
 
 
     public void error(String name, String detail, List<String> notes){
@@ -199,7 +112,7 @@ public class Interpreter {
         StringBuilder arrows = new StringBuilder();
         int npos = 0;
         String target = "NOTHING:UNKNOWN";
-        for (Token i : tokens){
+        for (Token i : tokenManager.getAll()){
             npos++;
             if (npos >= pos-2 && npos <= pos+4){
                 String tokenStr;
@@ -236,14 +149,7 @@ public class Interpreter {
         }
     }
 
-    public List<Token> changeTokensParent(Interpreter interpreter){
-        List<Token> s = new ArrayList<>();
-        for (Token token : this.tokens){
-            token.interpreter = interpreter;
-            s.add(token);
-        }
-        return s;
-    }
+
 
     public void meetEnd(){
         this.end = true;
@@ -255,7 +161,7 @@ public class Interpreter {
 
     public Interpreter clone(){
         Interpreter intr = new Interpreter();
-        intr.setup(data, tokens, text, filePath);
+        intr.setup(data, tokenManager, text, filePath);
         return intr;
     }
 }

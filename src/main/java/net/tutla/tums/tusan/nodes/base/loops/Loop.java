@@ -27,12 +27,12 @@ public class Loop extends Node {
     public Loop create(){
         if (token.type == TokenType.NUMBER){
             times = ((Double) new Expression(interpreter.currentToken).create().value).intValue();
-            interpreter.expectToken(TokenType.KEYWORD, "times");
+            interpreter.tokenManager.expectToken(TokenType.KEYWORD, "times");
         } else if (token.type == TokenType.KEYWORD && token.value.equals("all")) {
-            String target = interpreter.expectTokenClassic("KEYWORD:items|KEYWORD:characters").value;
-            interpreter.expectToken(TokenType.LOGIC, "in");
+            String target = interpreter.tokenManager.expectTokenClassic("KEYWORD:items|KEYWORD:characters").value;
+            interpreter.tokenManager.expectToken(TokenType.LOGIC, "in");
             if (target.equals("characters") || target.equals("items")){
-                times = new Expression(interpreter.nextToken()).create().value;
+                times = new Expression(interpreter.tokenManager.nextToken()).create().value;
             }
         } else {
             interpreter.error("TusanError", "Tusan does not support this iterable", Arrays.asList("This is caused due to the Tusan API limitations on the parent language. To fix it use the main branch (Python) or reimplement it."));
@@ -76,7 +76,7 @@ public class Loop extends Node {
         boolean endBlock = false;
 
         while (!endBlock){
-            Token nxt = interpreter.nextToken();
+            Token nxt = interpreter.tokenManager.nextToken();
             if (nxt.type == TokenType.ENDSTRUCTURE) {
                 endBlock = true;
             } else if (nxt.type == TokenType.BREAKSTRUCTURE){ // broken bcuz it won't work inside structures
@@ -95,9 +95,9 @@ public class Loop extends Node {
     }
 
     public void parseAs(){
-        if (interpreter.getNextToken().type == TokenType.KEYWORD && interpreter.getNextToken().value.equals("as")){
-            interpreter.nextToken();
-            Token var = interpreter.nextToken();
+        if (interpreter.tokenManager.getNextToken().type == TokenType.KEYWORD && interpreter.tokenManager.getNextToken().value.equals("as")){
+            interpreter.tokenManager.nextToken();
+            Token var = interpreter.tokenManager.nextToken();
             if (var.type == TokenType.IDENTIFIER){
                 setAs(var.value);
             }
