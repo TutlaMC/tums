@@ -1,6 +1,5 @@
 package net.tutla.tums.tusan.lexer;
 
-import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 
@@ -14,6 +13,8 @@ public class Lexer {
 
     public String text;
     private final Interpreter interpreter;
+
+    private TusanLanguage lang;
 
     private int pos = 0;
     private final StringBuilder currentToken = new StringBuilder();
@@ -30,9 +31,10 @@ public class Lexer {
 
     // event mappings are in tusan.Utils
 
-    public Lexer(String text, Interpreter interpreter) {
+    public Lexer(String text, Interpreter interpreter, TusanLanguage lang) {
         this.text = text;
         this.interpreter = interpreter;
+        this.lang = lang;
     }
 
     private void register(TokenType name, String value) { // adds token
@@ -40,53 +42,13 @@ public class Lexer {
         currentToken.setLength(0);
     }
 
-    record Rule(TokenType type, String regex) {}
-
-    private static final List<Rule> RULES = List.of(
-            new Rule(TokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
-            new Rule(TokenType.NUMBER, "\\d+(\\.\\d+)?"),
-            new Rule(TokenType.BOOL, "\\b(true|false)\\b"),
-            new Rule(TokenType.NOTHING, "\\bnothing\\b"),
-
-            new Rule(TokenType.OPERATOR, "[+\\-*/%]"),
-            new Rule(TokenType.LOGIC, "(?:\\b(?:and|or|not|contains|in)\\b|\\|\\||&&)"),
-            new Rule(TokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"), // ← Fixed name
-            new Rule(TokenType.EQUAL, "="),
-
-            new Rule(TokenType.LEFT_CURLY, "\\{"),
-            new Rule(TokenType.RIGHT_CURLY, "\\}"),
-            new Rule(TokenType.LEFT_PAR, "\\("),
-            new Rule(TokenType.RIGHT_PAR, "\\)"),
-            new Rule(TokenType.LEFT_SQUARE, "\\["),
-            new Rule(TokenType.RIGHT_SQUARE, "\\]"),
-            new Rule(TokenType.SEMICOLON, ";"),
-            new Rule(TokenType.COLON, ":"),
-            new Rule(TokenType.COMMA, ",")
-    );
-
-    private static final Pattern MASTER;
-
-    static {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < RULES.size(); i++) {
-            Rule rule = RULES.get(i);
-            if (sb.length() > 0) sb.append("|");
-            // Use index-based naming to avoid any naming issues
-            sb.append("(?<G").append(i).append(">(?:").append(rule.regex()).append("))");
-        }
-
-        sb.append("|(?<IDENTIFIER>[A-Za-z_][A-Za-z0-9_]*)");
-        sb.append("|(?<WHITESPACE>[ \\t\\r\\n]+)");
-        MASTER = Pattern.compile(sb.toString());
-    }
-
     public List<Token> classify() {
-        Matcher matcher = MASTER.matcher(text);
+        Matcher matcher = lang.match(text);
 
         while (matcher.find()) {
             boolean matched = false;
-            for (int i = 0; i < RULES.size(); i++) {
-                Rule rule = RULES.get(i);
+            for (int i = 0; i < lang.getRules().size(); i++) {
+                LexerRule rule = lang.getRules().get(i);
                 if (matcher.group("G" + i) != null) {
                     String value = matcher.group("G" + i);
                     register(rule.type(), value);

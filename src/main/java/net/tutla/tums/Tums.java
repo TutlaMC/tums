@@ -37,7 +37,7 @@ public class Tums implements ModInitializer {
                         Interpreter interpreter = new Interpreter();
                         interpreter.setup(null,null,null, path);
                         try{
-                            interpreter.compile();
+                            interpreter.compile(); // where every script in the dir gets executed
                         } catch (Exception e){
                             e.printStackTrace();
                         }

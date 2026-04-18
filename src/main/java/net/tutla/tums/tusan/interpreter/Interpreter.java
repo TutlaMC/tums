@@ -5,18 +5,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import net.tutla.tums.tusan.Tusan;
+import net.tutla.tums.tusan.lang.Tusan;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Lexer;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
-import net.tutla.tums.tusan.nodes.Statement;
-import net.tutla.tums.tusan.nodes.base.Return;
+import net.tutla.tums.tusan.lexer.TusanLanguage;
 
 public class Interpreter {
 
-    private static Lexer lexer;
+    private TusanLanguage lang = new Tusan().getLang();
+    private Lexer lexer;
     public Utils util = new Utils();
 
     public InterpreterData data;
@@ -48,14 +48,14 @@ public class Interpreter {
         if (file != null) {
             this.text = readFileContents(file);
             this.file = String.valueOf(file.toAbsolutePath());
-            this.filePath = filePath;
+            this.filePath = file;
         }
         else {
             this.file = "<stdin>";
         }
 
         if (tknmanager == null){
-            lexer = new Lexer(this.text, this);
+            lexer = new Lexer(this.text, this, lang);
             tokenManager.setTokens(lexer.classify());
         } else {
             tokenManager.setTokens(tknmanager.getAll());
@@ -163,5 +163,9 @@ public class Interpreter {
         Interpreter intr = new Interpreter();
         intr.setup(data, tokenManager, text, filePath);
         return intr;
+    }
+
+    public void setLanguage(TusanLanguage lang){
+        this.lang = lang;
     }
 }
