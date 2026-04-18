@@ -1,6 +1,6 @@
 package net.tutla.tums.tusan.lang;
 
-import net.tutla.tums.tusan.Node;
+import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.*;
 import net.tutla.tums.tusan.nodes.Statement;

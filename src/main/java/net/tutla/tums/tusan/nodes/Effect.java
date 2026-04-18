@@ -1,12 +1,9 @@
 package net.tutla.tums.tusan.nodes;
 
-import net.tutla.tums.tusan.Node;
+import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.nodes.effects.Print;
 import net.tutla.tums.tusan.nodes.effects.Set;
-import net.tutla.tums.tusan.nodes.effects.Wait;
-
-import java.util.Objects;
 
 public class Effect extends Node {
     public Object value;

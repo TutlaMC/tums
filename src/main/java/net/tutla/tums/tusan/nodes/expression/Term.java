@@ -1,6 +1,6 @@
 package net.tutla.tums.tusan.nodes.expression;
 
-import net.tutla.tums.tusan.Node;
+import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 

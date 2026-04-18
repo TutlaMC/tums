@@ -1,6 +1,6 @@
 package net.tutla.tums.tusan.nodes.base.function;
 
-import net.tutla.tums.tusan.Node;
+import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;

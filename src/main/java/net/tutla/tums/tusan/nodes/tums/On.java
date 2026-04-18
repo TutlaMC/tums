@@ -1,6 +1,6 @@
 package net.tutla.tums.tusan.nodes.tums;
 
-import net.tutla.tums.tusan.Node;
+import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.interpreter.TokenManager;
 import net.tutla.tums.tusan.lexer.Token;
