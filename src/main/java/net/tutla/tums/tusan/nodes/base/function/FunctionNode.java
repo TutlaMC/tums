@@ -6,7 +6,7 @@ import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.interpreter.TokenManager;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
 import java.util.ArrayList;
@@ -25,18 +25,18 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
     public FunctionNode create(){
         Boolean paramChecks = false; // checking optional parameters
 
-        interpreter.tokenManager.expectTokenType(TokenType.LEFT_PAR);
-        while (interpreter.tokenManager.getNextToken().type == TokenType.IDENTIFIER){
+        interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.LEFT_PAR);
+        while (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.IDENTIFIER){
             String parameterName = interpreter.tokenManager.nextToken().value;
             FunctionParameter parameter = new FunctionParameter(parameterName);
-            if (interpreter.tokenManager.getNextToken().type == TokenType.COLON){
+            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.COLON){
                 interpreter.tokenManager.nextToken();
                 parameter.setType(Utils.getTypeFromName(interpreter.tokenManager.nextToken()));
             } else {
                 parameter.setType(Types.ANY);
             }
 
-            if (interpreter.tokenManager.getNextToken().type == TokenType.EQUAL){
+            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.EQUAL){
                 paramChecks = true;
                 interpreter.tokenManager.nextToken();
                 parameter.setFallback(new Expression(interpreter.tokenManager.nextToken()).create().value);
@@ -51,8 +51,8 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
 
             parameters.add(parameter);
         }
-        interpreter.tokenManager.expectTokenType(TokenType.RIGHT_PAR);
-        interpreter.tokenManager.expectTokenType(TokenType.COLON);
+        interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_PAR);
+        interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.COLON);
 
         List<Token> tokens = new ArrayList<>();
         int structures = 0;
@@ -63,9 +63,9 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
             return this;
         }
 
-        if (nextToken.type == TokenType.ENDSTRUCTURE){
+        if (nextToken.type == PrebuiltTusanTokenType.ENDSTRUCTURE){
             interpreter.tokenManager.nextToken();
-            tokens.add(new Token(TokenType.ENDSCRIPT, "", interpreter));
+            tokens.add(new Token(PrebuiltTusanTokenType.ENDSCRIPT, "", interpreter));
         } else {
             while (true){
                 nextToken = interpreter.tokenManager.nextToken();
@@ -75,10 +75,10 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
                 }
 
 
-                if (nextToken.type == TokenType.STRUCTURE){
+                if (nextToken.type == PrebuiltTusanTokenType.STRUCTURE){
                     structures++;
                     tokens.add(nextToken);
-                } else if (nextToken.type == TokenType.ENDSTRUCTURE){
+                } else if (nextToken.type == PrebuiltTusanTokenType.ENDSTRUCTURE){
                     if (structures == 0){
                         break;
                     } else {
@@ -90,7 +90,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
                 }
             }
         }
-        tokens.add(new Token(TokenType.ENDSCRIPT, "function", interpreter));
+        tokens.add(new Token(PrebuiltTusanTokenType.ENDSCRIPT, "function", interpreter));
         TokenManager e = new TokenManager(functionInterpreter);
         e.setTokens(tokens);
         functionInterpreter.setup(interpreter.data, e, null, null );

@@ -2,9 +2,7 @@ package net.tutla.tums.tusan.nodes.expression;
 
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
-
-import java.util.Objects;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 
 public class Condition extends Node {
     public Boolean value;
@@ -12,7 +10,7 @@ public class Condition extends Node {
 
     public Condition(Token token){
         super(token);
-        if (token.type == TokenType.LOGIC && token.value.equals("not")){
+        if (token.type == PrebuiltTusanTokenType.LOGIC && token.value.equals("not")){
             this.opposite = true;
         }
 
@@ -21,7 +19,7 @@ public class Condition extends Node {
     public Condition create(){
         value = true;
         Expression expr1 = new Expression(token).create();
-        if (interpreter.tokenManager.getNextToken().type == TokenType.LOGIC){
+        if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.LOGIC){
             String operator = interpreter.tokenManager.nextToken().value;
             Expression expr2 = new Expression(interpreter.tokenManager.nextToken()).create();
             if (operator.equals("and") || operator.equals("&&")){

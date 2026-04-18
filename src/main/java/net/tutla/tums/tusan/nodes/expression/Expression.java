@@ -2,10 +2,9 @@ package net.tutla.tums.tusan.nodes.expression;
 
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Expression extends Node {
@@ -17,10 +16,10 @@ public class Expression extends Node {
     public Expression create(){
 
         Term term1 = new Term(token).create();
-        if (Arrays.asList(TokenType.OPERATOR, TokenType.COMPARISON).contains(interpreter.tokenManager.getNextToken().type)){
+        if (Arrays.asList(PrebuiltTusanTokenType.OPERATOR, PrebuiltTusanTokenType.COMPARISON).contains(interpreter.tokenManager.getNextToken().type)){
             Token op = interpreter.tokenManager.nextToken();
             Expression term2 = new Expression(interpreter.tokenManager.nextToken()).create();
-            if (op.type == TokenType.OPERATOR){
+            if (op.type == PrebuiltTusanTokenType.OPERATOR){
                 if (Objects.equals(op.value, "+")){
                     if (term1.value instanceof String && term2.value instanceof String){
                         value = (String) term1.value + (String) term2.value;
@@ -31,7 +30,7 @@ public class Expression extends Node {
                 } else if (Objects.equals(op.value, "-")) {
                     value = (Double) term1.value - (Double) term2.value;
                 }
-            } else if (op.type == TokenType.COMPARISON){
+            } else if (op.type == PrebuiltTusanTokenType.COMPARISON){
                 value = compare(op, term1, term2);
             }
         } else {

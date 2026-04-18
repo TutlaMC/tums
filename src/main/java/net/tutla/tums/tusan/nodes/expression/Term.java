@@ -2,7 +2,7 @@ package net.tutla.tums.tusan.nodes.expression;
 
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -15,7 +15,7 @@ public class Term extends Node {
 
     public Term create(){
         Factor term1 = new Factor(token).create();
-        if (interpreter.tokenManager.getNextToken().type == TokenType.OPERATOR){
+        if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.OPERATOR){
             Token op = interpreter.tokenManager.getNextToken();
             if (Arrays.asList("*","/","**","^").contains(op.value)){
                 interpreter.tokenManager.nextToken();

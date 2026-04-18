@@ -1,13 +1,11 @@
 package net.tutla.tums.tusan;
 
-import it.unimi.dsi.fastutil.Hash;
 import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 import net.tutla.tums.tusan.tums.EventType;
-import net.tutla.tums.tusan.tums.objects.TumsPlayer;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -52,7 +50,7 @@ public class Utils {
     }
 
     public Double isOrdinal(Token token){
-        if (token.type == TokenType.IDENTIFIER){
+        if (token.type == PrebuiltTusanTokenType.IDENTIFIER){
             String val = token.value.toLowerCase();
             if (val.endsWith("st") || val.endsWith("nd") || val.endsWith("rd") || val.endsWith("th")){
                 try {
@@ -141,7 +139,7 @@ public class Utils {
     }
 
     public static Types getTypeFromName(Token token){
-        if (token.type == TokenType.TYPE){
+        if (token.type == PrebuiltTusanTokenType.TYPE){
             for (Types type : Types.values()){
                 if (token.value.equalsIgnoreCase(type.name())){
                     return type;

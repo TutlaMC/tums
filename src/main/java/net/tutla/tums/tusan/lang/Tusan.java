@@ -14,25 +14,25 @@ public class Tusan {
     private final List<Node> nodes = new ArrayList<>();
 
     private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of(
-            new LexerRule(TokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
-            new LexerRule(TokenType.NUMBER, "\\d+(\\.\\d+)?"),
-            new LexerRule(TokenType.BOOL, "\\b(true|false)\\b"),
-            new LexerRule(TokenType.NOTHING, "\\bnothing\\b"),
+            new LexerRule(PrebuiltTusanTokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
+            new LexerRule(PrebuiltTusanTokenType.NUMBER, "\\d+(\\.\\d+)?"),
+            new LexerRule(PrebuiltTusanTokenType.BOOL, "\\b(true|false)\\b"),
+            new LexerRule(PrebuiltTusanTokenType.NOTHING, "\\bnothing\\b"),
 
-            new LexerRule(TokenType.OPERATOR, "[+\\-*/%]"),
-            new LexerRule(TokenType.LOGIC, "(?:\\b(?:and|or|not|contains|in)\\b|\\|\\||&&)"),
-            new LexerRule(TokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"), // ← Fixed name
-            new LexerRule(TokenType.EQUAL, "="),
+            new LexerRule(PrebuiltTusanTokenType.OPERATOR, "[+\\-*/%]"),
+            new LexerRule(PrebuiltTusanTokenType.LOGIC, "(?:\\b(?:and|or|not|contains|in)\\b|\\|\\||&&)"),
+            new LexerRule(PrebuiltTusanTokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"), // ← Fixed name
+            new LexerRule(PrebuiltTusanTokenType.EQUAL, "="),
 
-            new LexerRule(TokenType.LEFT_CURLY, "\\{"),
-            new LexerRule(TokenType.RIGHT_CURLY, "\\}"),
-            new LexerRule(TokenType.LEFT_PAR, "\\("),
-            new LexerRule(TokenType.RIGHT_PAR, "\\)"),
-            new LexerRule(TokenType.LEFT_SQUARE, "\\["),
-            new LexerRule(TokenType.RIGHT_SQUARE, "\\]"),
-            new LexerRule(TokenType.SEMICOLON, ";"),
-            new LexerRule(TokenType.COLON, ":"),
-            new LexerRule(TokenType.COMMA, ",")
+            new LexerRule(PrebuiltTusanTokenType.LEFT_CURLY, "\\{"),
+            new LexerRule(PrebuiltTusanTokenType.RIGHT_CURLY, "\\}"),
+            new LexerRule(PrebuiltTusanTokenType.LEFT_PAR, "\\("),
+            new LexerRule(PrebuiltTusanTokenType.RIGHT_PAR, "\\)"),
+            new LexerRule(PrebuiltTusanTokenType.LEFT_SQUARE, "\\["),
+            new LexerRule(PrebuiltTusanTokenType.RIGHT_SQUARE, "\\]"),
+            new LexerRule(PrebuiltTusanTokenType.SEMICOLON, ";"),
+            new LexerRule(PrebuiltTusanTokenType.COLON, ":"),
+            new LexerRule(PrebuiltTusanTokenType.COMMA, ",")
     );
 
     public Tusan(){
@@ -66,9 +66,9 @@ public class Tusan {
             if (ctx.interpreter.end){
                 return;
             }
-            if (currentToken.type == TokenType.ENDSCRIPT){ // how did you get here?
+            if (currentToken.type == PrebuiltTusanTokenType.ENDSCRIPT){ // how did you get here?
                 return;
-            } else if (currentToken.type == TokenType.BREAKSTRUCTURE && currentToken.value.equals("return")){
+            } else if (currentToken.type == PrebuiltTusanTokenType.BREAKSTRUCTURE && currentToken.value.equals("return")){
                 new Return(ctx.tokenContext.nextToken()).create();
             } else {
                 new Statement(currentToken).create();
@@ -77,7 +77,7 @@ public class Tusan {
                 ctx.interpreter.meetEnd();
             } else {
                 Token e = ctx.tokenContext.nextToken();
-                if (e.type == TokenType.ENDSCRIPT){
+                if (e.type == PrebuiltTusanTokenType.ENDSCRIPT){
                     ctx.interpreter.meetEnd();
                 }
             }

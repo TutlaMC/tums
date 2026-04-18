@@ -2,7 +2,7 @@ package net.tutla.tums.tusan.nodes;
 
 import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.base.If;
 import net.tutla.tums.tusan.nodes.base.Return;
 import net.tutla.tums.tusan.nodes.base.function.FunctionNode;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Statement extends Node {
-    private final List<TokenType> validTypes = Arrays.asList(TokenType.STRUCTURE, TokenType.KEYWORD, TokenType.IDENTIFIER, TokenType.EFFECT, TokenType.LEFT_CURLY, TokenType.NUMBER, TokenType.STRING);
+    private final List<PrebuiltTusanTokenType> validTypes = Arrays.asList(PrebuiltTusanTokenType.STRUCTURE, PrebuiltTusanTokenType.KEYWORD, PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.EFFECT, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING);
     public Statement(Token token){
         super(token);
     }
@@ -26,15 +26,15 @@ public class Statement extends Node {
             return false;
         }
 
-        if (token.type == TokenType.LEFT_CURLY){
+        if (token.type == PrebuiltTusanTokenType.LEFT_CURLY){
             new Statement(interpreter.tokenManager.nextToken()).create();
-            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_CURLY);
+            interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_CURLY);
             return value;
         }
         if (validTypes.contains(token.type)){
-            if (token.type == TokenType.EFFECT){
+            if (token.type == PrebuiltTusanTokenType.EFFECT){
                 value = new Effect(token).create();
-            } else if (token.type == TokenType.STRUCTURE){
+            } else if (token.type == PrebuiltTusanTokenType.STRUCTURE){
                 if (token.value.equals("if")){
                     new If(interpreter.tokenManager.nextToken()).create();
                 } else if (token.value.equals("while")) {
@@ -48,14 +48,14 @@ public class Statement extends Node {
                 } else {
                     interpreter.error("UnexpectedToken", "Structure "+token.type.name()+":"+token.value+" has no definition", null);
                 }
-            } else if (Arrays.asList(TokenType.IDENTIFIER, TokenType.LEFT_CURLY, TokenType.NUMBER, TokenType.STRING, TokenType.KEYWORD).contains(token.type)){
+            } else if (Arrays.asList(PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING, PrebuiltTusanTokenType.KEYWORD).contains(token.type)){
                 value = new Expression(token).create();
-            } else if (token.type ==  TokenType.BREAKSTRUCTURE){
+            } else if (token.type ==  PrebuiltTusanTokenType.BREAKSTRUCTURE){
                 value = new Return(token).create();
             } else {
                 interpreter.error("UnexpectedToken", "Expected valid statement got "+token.type.name()+":"+token.value, null);
             }
-        } else if (token.type == TokenType.BREAKSTRUCTURE && token.value.equals("return")){
+        } else if (token.type == PrebuiltTusanTokenType.BREAKSTRUCTURE && token.value.equals("return")){
             new Return(token).create();
         } else {
             interpreter.error("UnexpectedToken", "Expected valid statement got "+token.type.name()+":"+token.value, null);

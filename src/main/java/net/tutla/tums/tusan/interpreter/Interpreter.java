@@ -10,7 +10,7 @@ import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Lexer;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.lexer.TusanLanguage;
 
 public class Interpreter {
@@ -117,7 +117,7 @@ public class Interpreter {
             if (npos >= pos-2 && npos <= pos+4){
                 String tokenStr;
                 int width;
-                if (i.type == TokenType.STRING){
+                if (i.type == PrebuiltTusanTokenType.STRING){
                     tokenStr = " \"" + i.value + "\"";
                     width = i.value.length() + 3;
                 } else {

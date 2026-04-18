@@ -1,16 +1,12 @@
 package net.tutla.tums.tusan.nodes.base.loops;
 
 import net.tutla.tums.tusan.Node;
-import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.Statement;
 import net.tutla.tums.tusan.nodes.expression.Expression;
-import net.tutla.tums.tusan.nodes.expression.Factor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Loop extends Node {
     private Integer pos;
@@ -25,12 +21,12 @@ public class Loop extends Node {
     }
 
     public Loop create(){
-        if (token.type == TokenType.NUMBER){
+        if (token.type == PrebuiltTusanTokenType.NUMBER){
             times = ((Double) new Expression(interpreter.currentToken).create().value).intValue();
-            interpreter.tokenManager.expectToken(TokenType.KEYWORD, "times");
-        } else if (token.type == TokenType.KEYWORD && token.value.equals("all")) {
+            interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "times");
+        } else if (token.type == PrebuiltTusanTokenType.KEYWORD && token.value.equals("all")) {
             String target = interpreter.tokenManager.expectTokenClassic("KEYWORD:items|KEYWORD:characters").value;
-            interpreter.tokenManager.expectToken(TokenType.LOGIC, "in");
+            interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.LOGIC, "in");
             if (target.equals("characters") || target.equals("items")){
                 times = new Expression(interpreter.tokenManager.nextToken()).create().value;
             }
@@ -77,9 +73,9 @@ public class Loop extends Node {
 
         while (!endBlock){
             Token nxt = interpreter.tokenManager.nextToken();
-            if (nxt.type == TokenType.ENDSTRUCTURE) {
+            if (nxt.type == PrebuiltTusanTokenType.ENDSTRUCTURE) {
                 endBlock = true;
-            } else if (nxt.type == TokenType.BREAKSTRUCTURE){ // broken bcuz it won't work inside structures
+            } else if (nxt.type == PrebuiltTusanTokenType.BREAKSTRUCTURE){ // broken bcuz it won't work inside structures
                 run = false;
             } else {
                 if (run){
@@ -95,10 +91,10 @@ public class Loop extends Node {
     }
 
     public void parseAs(){
-        if (interpreter.tokenManager.getNextToken().type == TokenType.KEYWORD && interpreter.tokenManager.getNextToken().value.equals("as")){
+        if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.KEYWORD && interpreter.tokenManager.getNextToken().value.equals("as")){
             interpreter.tokenManager.nextToken();
             Token var = interpreter.tokenManager.nextToken();
-            if (var.type == TokenType.IDENTIFIER){
+            if (var.type == PrebuiltTusanTokenType.IDENTIFIER){
                 setAs(var.value);
             }
         } else {

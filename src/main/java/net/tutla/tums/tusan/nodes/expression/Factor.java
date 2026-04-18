@@ -4,11 +4,10 @@ import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.Effect;
 import net.tutla.tums.tusan.nodes.base.Name;
 import net.tutla.tums.tusan.nodes.base.function.ExecuteFunction;
-import net.tutla.tums.tusan.nodes.base.function.FunctionRegistry;
 
 import java.util.*;
 
@@ -21,16 +20,16 @@ public class Factor extends Node {
 
     public Factor create(){
         value = token.value;
-        if (token.type == TokenType.OPERATOR && token.value == "-"){
-            if (interpreter.tokenManager.getNextToken().type == TokenType.NUMBER){
+        if (token.type == PrebuiltTusanTokenType.OPERATOR && token.value == "-"){
+            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.NUMBER){
                 String e = interpreter.tokenManager.nextToken().value;
-                interpreter.currentToken = new Token(TokenType.NUMBER, "-"+e, interpreter);
+                interpreter.currentToken = new Token(PrebuiltTusanTokenType.NUMBER, "-"+e, interpreter);
                 token = interpreter.currentToken;
             }
         }
-        if (token.type == TokenType.NUMBER){
+        if (token.type == PrebuiltTusanTokenType.NUMBER){
             this.value = Double.parseDouble(token.value);
-            if (interpreter.tokenManager.getNextToken().type == TokenType.TIME){
+            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.TIME){
                 HashMap<String, Double> timeUnits = new HashMap<>();
                 timeUnits.put("millisecond", 0.001);
                 timeUnits.put("second", 1.0);
@@ -43,13 +42,13 @@ public class Factor extends Node {
 
                 value = (Double) value*timeUnits.get(interpreter.tokenManager.nextToken().value);
             }
-        } else if (token.type == TokenType.STRING){
+        } else if (token.type == PrebuiltTusanTokenType.STRING){
             value = token.value;
-        } else if (token.type == TokenType.BOOL){
+        } else if (token.type == PrebuiltTusanTokenType.BOOL){
             value = Objects.equals(token.value, "true");
-        } else if (token.type == TokenType.NOTHING) {
+        } else if (token.type == PrebuiltTusanTokenType.NOTHING) {
             value = null;
-        } else if (token.type == TokenType.TYPE){
+        } else if (token.type == PrebuiltTusanTokenType.TYPE){
             if (token.value == "NUMBER"){
                 value = Types.NUMBER;
             } else if (token.value == "STRING"){
@@ -59,17 +58,17 @@ public class Factor extends Node {
             } else if (token.value == "BOOLEAN"){
                 value = Types.BOOL;
             }
-        } else if (token.type == TokenType.KEYWORD){
+        } else if (token.type == PrebuiltTusanTokenType.KEYWORD){
             // WIP
-        } else if (token.type == TokenType.EFFECT) {
+        } else if (token.type == PrebuiltTusanTokenType.EFFECT) {
             value = new Effect(token).create().value;
-        } else if (token.type == TokenType.IDENTIFIER){
+        } else if (token.type == PrebuiltTusanTokenType.IDENTIFIER){
             Object ordn = util.isOrdinal(token);
             if (ordn != null){
                 int n = ((Double) ordn).intValue();
                 n--;
                 interpreter.tokenManager.expectTokenClassic("KEYWORD:character|KEYWORD:item");
-                interpreter.tokenManager.expectToken(TokenType.LOGIC, "in");
+                interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.LOGIC, "in");
                 Object list = new Factor(interpreter.tokenManager.nextToken()).create().value;
                 if (list instanceof List) {
                     value = ((List<Object>) list).get(n);
@@ -87,43 +86,43 @@ public class Factor extends Node {
             } else {
                 interpreter.error("UndefinedVariable",token.value+" was not defined", null);
             }
-        } else if (token.type == TokenType.LEFT_PAR) {
+        } else if (token.type == PrebuiltTusanTokenType.LEFT_PAR) {
             value = new Expression(interpreter.tokenManager.nextToken()).create().value;
-            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_PAR);
-        } else if (token.type == TokenType.LEFT_CURLY){ // TSON :fire: (Tutla's Object Notation or Tutla's Shitty Object Notation)
+            interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_PAR);
+        } else if (token.type == PrebuiltTusanTokenType.LEFT_CURLY){ // TSON :fire: (Tutla's Object Notation or Tutla's Shitty Object Notation)
             HashMap<String, Object> dict = new HashMap<>();
-            while (interpreter.tokenManager.getNextToken().type != TokenType.RIGHT_CURLY){
+            while (interpreter.tokenManager.getNextToken().type != PrebuiltTusanTokenType.RIGHT_CURLY){
                 Token e = interpreter.tokenManager.nextToken();
-                if (e.type == TokenType.STRING){
+                if (e.type == PrebuiltTusanTokenType.STRING){
                     String key = e.value;
-                    interpreter.tokenManager.expectTokenType(TokenType.COLON);
+                    interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.COLON);
                     Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
                     dict.put(key, val);
                 }
-                if (interpreter.tokenManager.getNextToken().type == TokenType.COMMA){
+                if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.COMMA){
                     interpreter.tokenManager.nextToken();
                 }
             }
-            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_CURLY);
+            interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_CURLY);
             value = dict;
-        } else if (token.type == TokenType.LEFT_SQUARE){
+        } else if (token.type == PrebuiltTusanTokenType.LEFT_SQUARE){
             List<Object> list = new ArrayList<>();
-            while (interpreter.tokenManager.getNextToken().type != TokenType.RIGHT_SQUARE){
+            while (interpreter.tokenManager.getNextToken().type != PrebuiltTusanTokenType.RIGHT_SQUARE){
                 list.add(new Expression(interpreter.tokenManager.nextToken()).create().value);
-                if (interpreter.tokenManager.getNextToken().type != TokenType.COMMA && interpreter.tokenManager.getNextToken().type != TokenType.RIGHT_SQUARE){
+                if (interpreter.tokenManager.getNextToken().type != PrebuiltTusanTokenType.COMMA && interpreter.tokenManager.getNextToken().type != PrebuiltTusanTokenType.RIGHT_SQUARE){
                     interpreter.error("InvalidList", "Invalid list, seperate items using a comma and close it in a square bracket", null);
                 }
-                if (interpreter.tokenManager.getNextToken().type == TokenType.COMMA){
+                if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.COMMA){
                     interpreter.tokenManager.nextToken();
                 }
             }
-            interpreter.tokenManager.expectTokenType(TokenType.RIGHT_SQUARE);
+            interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_SQUARE);
             value = list;
         } else {
             interpreter.error("InvalidFactor",value.toString()+" is not a valid factor",null);
         }
 
-        if ((value instanceof String || value instanceof ArrayList || value instanceof HashMap) && interpreter.tokenManager.getNextToken().type == TokenType.LEFT_SQUARE){
+        if ((value instanceof String || value instanceof ArrayList || value instanceof HashMap) && interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.LEFT_SQUARE){
             // TODO should add indexing similar to native tusan
         }
 

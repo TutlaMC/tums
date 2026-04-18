@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Lexer {
 
@@ -37,7 +36,7 @@ public class Lexer {
         this.lang = lang;
     }
 
-    private void register(TokenType name, String value) { // adds token
+    private void register(PrebuiltTusanTokenType name, String value) { // adds token
         tokens.add(new Token(name, value, interpreter));
         currentToken.setLength(0);
     }
@@ -62,32 +61,32 @@ public class Lexer {
                     String value = matcher.group("IDENTIFIER");
 
                     if (keywords.contains(value)) {
-                        register(TokenType.KEYWORD, value);
+                        register(PrebuiltTusanTokenType.KEYWORD, value);
                     } else if (effects.contains(value)) {
-                        register(TokenType.EFFECT, value);
+                        register(PrebuiltTusanTokenType.EFFECT, value);
                     } else if (structures.contains(value)) {
-                        register(TokenType.STRUCTURE, value);
+                        register(PrebuiltTusanTokenType.STRUCTURE, value);
                     } else if (value.equals("end")) {
-                        register(TokenType.ENDSTRUCTURE, value);
+                        register(PrebuiltTusanTokenType.ENDSTRUCTURE, value);
                     } else if (Arrays.asList("return","break").contains(value)) {
-                        register(TokenType.BREAKSTRUCTURE, value);
+                        register(PrebuiltTusanTokenType.BREAKSTRUCTURE, value);
                     } else if (types != null && types.contains(value)) {
-                        register(TokenType.TYPE, value);
+                        register(PrebuiltTusanTokenType.TYPE, value);
                     } else if (Utils.isEventType(value)) {
-                        register(TokenType.EVENT, value);
+                        register(PrebuiltTusanTokenType.EVENT, value);
                     } else if (timeReprs.contains(value)) {
                         String timeValue = value.endsWith("s") ?
                                 value.substring(0, value.length() - 1) : value;
-                        register(TokenType.TIME, timeValue);
+                        register(PrebuiltTusanTokenType.TIME, timeValue);
                     } else {
-                        register(TokenType.IDENTIFIER, value);
+                        register(PrebuiltTusanTokenType.IDENTIFIER, value);
                     }
                 } else if (matcher.group("WHITESPACE") != null) {
                 }
             }
         }
 
-        register(TokenType.ENDSCRIPT, "");
+        register(PrebuiltTusanTokenType.ENDSCRIPT, "");
         return tokens;
     }
 }

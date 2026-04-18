@@ -1,12 +1,10 @@
 package net.tutla.tums.tusan.nodes.base;
 
 import net.tutla.tums.tusan.Node;
-import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Name extends Node {
@@ -19,15 +17,15 @@ public class Name extends Node {
 
     public Name create() {
         name = token.value;
-        if (interpreter.tokenManager.getNextToken().type == TokenType.PROPERTY) {
+        if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.PROPERTY) {
             location = ((Variable) location.get(name)).properties;
-            while (interpreter.tokenManager.getNextToken().type == TokenType.PROPERTY) {
+            while (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.PROPERTY) {
                 interpreter.tokenManager.nextToken();
                 name = interpreter.tokenManager.nextToken().value;
 
                 if (!location.containsKey(name)) break;
 
-                if (interpreter.tokenManager.getNextToken().type == TokenType.PROPERTY) {
+                if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.PROPERTY) {
                     location = ((Variable) location.get(name)).properties;
                 } else {
                     break;

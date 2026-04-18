@@ -6,10 +6,9 @@ import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ExecuteFunction extends Node {
     }
 
     public ExecuteFunction create(){
-        interpreter.tokenManager.expectTokenType(TokenType.LEFT_PAR);
+        interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.LEFT_PAR);
 
         originalFunction = interpreter.data.funcs.get(token.value);
         String name = token.value;
@@ -48,7 +47,7 @@ public class ExecuteFunction extends Node {
 
         while (optionalParameters.containsKey(interpreter.tokenManager.getNextToken().value)){ // evaluating the optional ones
             FunctionParameter parameter = optionalParameters.get(interpreter.tokenManager.getNextToken().value);
-            interpreter.tokenManager.expectTokenType(TokenType.EQUAL);
+            interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.EQUAL);
             Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
             if (parameter.type != Types.ANY){
                 Types valType = Utils.getTypeOfValue(val);
@@ -59,7 +58,7 @@ public class ExecuteFunction extends Node {
             functionInterpreter.data.vars.put(parameter.name, new Variable(parameter.name, val, new HashMap<>()));
             optionalParameters.remove(interpreter.tokenManager.getNextToken().value); // the ones that remain will take the fallback value
 
-            if (interpreter.tokenManager.getNextToken().type == TokenType.COMMA){
+            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.COMMA){
                 interpreter.tokenManager.nextToken();
             }
         }
@@ -68,7 +67,7 @@ public class ExecuteFunction extends Node {
             functionInterpreter.data.vars.put(parameter.name, new Variable(parameter.name, parameter.fallback, new HashMap<>()));
         }
 
-        interpreter.tokenManager.expectTokenType(TokenType.RIGHT_PAR);
+        interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_PAR);
         functionInterpreter.tokenManager.changeTokensParent(functionInterpreter);
         functionInterpreter.isFunction = true;
         functionInterpreter.compile();

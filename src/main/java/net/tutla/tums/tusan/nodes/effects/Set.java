@@ -4,7 +4,7 @@ import net.tutla.tums.tusan.Node;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.TokenType;
+import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.base.Name;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
@@ -24,16 +24,16 @@ public class Set extends Node {
             int n = ((Double) num).intValue();
             n--;
             interpreter.tokenManager.expectTokenClassic("KEYWORD:item|KEYWORD:character");
-            interpreter.tokenManager.expectToken(TokenType.LOGIC,"in");
+            interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.LOGIC,"in");
             Object val;
-            if (interpreter.tokenManager.getNextToken().type == TokenType.IDENTIFIER){
+            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.IDENTIFIER){
                 Name e = new Name(interpreter.tokenManager.nextToken()).create();
                 val = Name.name;
             } else {
                 Object e = new Expression(interpreter.tokenManager.nextToken());
                 val = e;
             }
-            interpreter.tokenManager.expectToken(TokenType.KEYWORD,"to");
+            interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD,"to");
 
             Object exprValue = new Expression(interpreter.tokenManager.nextToken()).create().value;
 
@@ -44,7 +44,7 @@ public class Set extends Node {
             }
         } else {
             Name n = new Name(name).create();
-            interpreter.tokenManager.expectToken(TokenType.KEYWORD,"to");
+            interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD,"to");
             Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
             if (val instanceof Variable){
                 ((Variable) val).name = n.name;

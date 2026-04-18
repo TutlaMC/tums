@@ -1,6 +1,6 @@
 package net.tutla.tums.tusan.lexer;
 
-public record LexerRule(TokenType type, String regex) {
+public record LexerRule(PrebuiltTusanTokenType type, String regex) {
 
 }
 
