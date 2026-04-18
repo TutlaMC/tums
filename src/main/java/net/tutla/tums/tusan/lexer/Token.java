@@ -4,11 +4,11 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 
 public class Token {
 
-    public PrebuiltTusanTokenType type;
+    public TokenType type;
     public String value;
     public Interpreter interpreter;
 
-    public Token(PrebuiltTusanTokenType type, String value, Interpreter interpreter){
+    public Token(TokenType type, String value, Interpreter interpreter){
         this.type = type;
         this.value = value;
         this.interpreter = interpreter;

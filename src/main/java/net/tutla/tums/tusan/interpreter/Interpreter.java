@@ -8,10 +8,10 @@ import java.util.List;
 import net.tutla.tums.tusan.lang.Tusan;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.Utils;
-import net.tutla.tums.tusan.lexer.Lexer;
-import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
-import net.tutla.tums.tusan.lexer.TusanLanguage;
+import net.tutla.tums.tusan.lexer.*;
+import net.tutla.tums.tusan.node.Node;
+import net.tutla.tums.tusan.tums.HelloNode;
+import net.tutla.tums.tusan.tums.TumsTokenType;
 
 public class Interpreter {
 
@@ -80,6 +80,12 @@ public class Interpreter {
         } */
 
         Tusan test = new Tusan();
+        // where api testing goes
+        test.registerLexerRule(new LexerRule(TumsTokenType.HELLO, "\\bhello\\b"));
+        test.registerNode(HelloNode.class);
+
+        /// /////////////////////
+
         TusanContext ctx = new TusanContext(this);
         test.compile(ctx);
     }

@@ -9,7 +9,8 @@ public class Print extends Node {
         super(token);
     }
 
-    public void create(){
+    public Print create(){
         System.out.println(new Expression(token).create().value);
+        return this;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Tusan {
     private final TusanLanguage lang = new TusanLanguage();
-    private final List<Node> nodes = new ArrayList<>();
+    private final List<Class<? extends Node>> nodes = new ArrayList<>();
 
     private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of(
             new LexerRule(PrebuiltTusanTokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
@@ -40,12 +40,13 @@ public class Tusan {
     }
 
     // registering
-    public void registerNode(Node node){
+    public void registerNode(Class<? extends Node> node){
         // TODO: Verify if node already exists
+        // TODO: Nodes should be able to be linked to: 1) the main statement loop and its direct descendants (Effects/Structures) 2) Expressions/Terms/Factors
         nodes.add(node);
     }
 
-    public List<Node> getNodes(){
+    public List<Class<? extends Node>> getNodes(){
         return nodes;
     }
 

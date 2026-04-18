@@ -36,7 +36,7 @@ public class Lexer {
         this.lang = lang;
     }
 
-    private void register(PrebuiltTusanTokenType name, String value) { // adds token
+    private void register(TokenType name, String value) { // adds token
         tokens.add(new Token(name, value, interpreter));
         currentToken.setLength(0);
     }
