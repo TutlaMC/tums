@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.tums;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.interpreter.TokenManager;
@@ -13,8 +14,8 @@ public class On extends Node {
     private Integer structures = 0;
     public List<Token> tokens = new ArrayList<>();
 
-    public On(Token token){
-        super(token);
+    public On(TusanContext ctx){
+        super(ctx);
     }
 
     public On create(){

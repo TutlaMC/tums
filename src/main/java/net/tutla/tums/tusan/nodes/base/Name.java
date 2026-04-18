@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.base;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.lexer.Token;
@@ -11,8 +12,8 @@ public class Name extends Node {
     public static String name;
     public Object value;
     public Map<String, Object> location = interpreter.data.vars;
-    public Name(Token token){
-        super(token);
+    public Name(TusanContext ctx){
+        super(ctx);
     }
 
     public Name create() {

@@ -9,12 +9,14 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Node {
     public Interpreter interpreter;
-    public Token token;
+    public TusanContext ctx;
     private NodeConfig nodeConf;
+    public Token token;
 
-    public Node(Token token){
-        this.token = token;
-        this.interpreter = token.interpreter;
+    public Node(TusanContext ctx){
+        this.ctx = ctx;
+        this.token = ctx.getCurrentToken();
+        this.interpreter = ctx.interpreter;
     }
 
     public NodeConfig getNodeConfig(){

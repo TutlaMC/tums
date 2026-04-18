@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.base.function;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
@@ -18,8 +19,8 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
     public List<FunctionParameter> parameters = new ArrayList<>();
     public Interpreter functionInterpreter = new Interpreter();
 
-    public FunctionNode(Token token){
-        super(token);
+    public FunctionNode(TusanContext ctx){
+        super(ctx);
     }
 
     public FunctionNode create(){
@@ -39,7 +40,8 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
             if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.EQUAL){
                 paramChecks = true;
                 interpreter.tokenManager.nextToken();
-                parameter.setFallback(new Expression(interpreter.tokenManager.nextToken()).create().value);
+                interpreter.tokenManager.nextToken();
+                parameter.setFallback(new Expression(ctx).create().value);
             } else {
                 if (!paramChecks){
                     parameter.setFallback(null);

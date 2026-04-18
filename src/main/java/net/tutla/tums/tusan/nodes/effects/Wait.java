@@ -1,17 +1,19 @@
 package net.tutla.tums.tusan.nodes.effects;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
 public class Wait extends Node {
-    public Wait(Token token){
-        super(token);
+    public Wait(TusanContext ctx){
+        super(ctx);
     }
 
     public Wait create() {
         try {
-            Double time = (Double) new Expression(interpreter.tokenManager.nextToken()).create().value;
+            interpreter.tokenManager.nextToken();
+            Double time = (Double) new Expression(ctx).create().value;
             Thread.sleep(time.intValue()* 1000L);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

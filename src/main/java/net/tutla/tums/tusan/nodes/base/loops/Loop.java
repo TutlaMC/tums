@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.base.loops;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
@@ -16,19 +17,20 @@ public class Loop extends Node {
     public String as;
     public Object times;
 
-    public Loop(Token token){
-        super(token);
+    public Loop(TusanContext ctx){
+        super(ctx);
     }
 
     public Loop create(){
         if (token.type == PrebuiltTusanTokenType.NUMBER){
-            times = ((Double) new Expression(interpreter.currentToken).create().value).intValue();
+            times = ((Double) new Expression(ctx).create().value).intValue();
             interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "times");
         } else if (token.type == PrebuiltTusanTokenType.KEYWORD && token.value.equals("all")) {
             String target = interpreter.tokenManager.expectTokenClassic("KEYWORD:items|KEYWORD:characters").value;
             interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.LOGIC, "in");
             if (target.equals("characters") || target.equals("items")){
-                times = new Expression(interpreter.tokenManager.nextToken()).create().value;
+                interpreter.tokenManager.nextToken();
+                times = new Expression(ctx).create().value;
             }
         } else {
             interpreter.error("TusanError", "Tusan does not support this iterable", Arrays.asList("This is caused due to the Tusan API limitations on the parent language. To fix it use the main branch (Python) or reimplement it."));
@@ -79,7 +81,7 @@ public class Loop extends Node {
                 run = false;
             } else {
                 if (run){
-                    new Statement(nxt).create();
+                    new Statement(ctx).create();
                 }
             }
         }

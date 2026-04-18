@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.base.function;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
@@ -15,8 +16,8 @@ import java.util.List;
 public class ExecuteFunction extends Node {
     public Object value;
     public FunctionRegistry originalFunction;
-    public ExecuteFunction(Token token){
-        super(token);
+    public ExecuteFunction(TusanContext ctx){
+        super(ctx);
     }
 
     public ExecuteFunction create(){
@@ -31,7 +32,8 @@ public class ExecuteFunction extends Node {
         Integer parameterPointer = 0;
         for (FunctionParameter parameter : parameters){ // checking the required ones
             if (parameter.required){
-                Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
+                interpreter.tokenManager.nextToken();
+                Object val = new Expression(ctx).create().value;
 
                 if (parameter.type != Types.ANY){
                     Types valType = Utils.getTypeOfValue(val);
@@ -48,7 +50,8 @@ public class ExecuteFunction extends Node {
         while (optionalParameters.containsKey(interpreter.tokenManager.getNextToken().value)){ // evaluating the optional ones
             FunctionParameter parameter = optionalParameters.get(interpreter.tokenManager.getNextToken().value);
             interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.EQUAL);
-            Object val = new Expression(interpreter.tokenManager.nextToken()).create().value;
+            interpreter.tokenManager.nextToken();
+            Object val = new Expression(ctx).create().value;
             if (parameter.type != Types.ANY){
                 Types valType = Utils.getTypeOfValue(val);
                 if (valType != parameter.type){

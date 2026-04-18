@@ -81,9 +81,10 @@ public class Tusan {
             if (currentToken.type == PrebuiltTusanTokenType.ENDSCRIPT){ // how did you get here?
                 return;
             } else if (currentToken.type == PrebuiltTusanTokenType.BREAKSTRUCTURE && currentToken.value.equals("return")){
-                new Return(ctx.tokenContext.nextToken()).create();
+                ctx.tokenContext.nextToken();
+                new Return(ctx).create();
             } else {
-                new Statement(currentToken).create();
+                new Statement(ctx).create();
             }
             if (ctx.tokenContext.getNextToken() == null){
                 ctx.interpreter.meetEnd();

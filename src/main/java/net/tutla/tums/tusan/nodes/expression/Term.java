@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.expression;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
@@ -9,17 +10,18 @@ import java.util.Objects;
 
 public class Term extends Node {
     public Object value;
-    public Term(Token token){
-        super(token);
+    public Term(TusanContext ctx){
+        super(ctx);
     }
 
     public Term create(){
-        Factor term1 = new Factor(token).create();
+        Factor term1 = new Factor(ctx).create();
         if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.OPERATOR){
             Token op = interpreter.tokenManager.getNextToken();
             if (Arrays.asList("*","/","**","^").contains(op.value)){
                 interpreter.tokenManager.nextToken();
-                Expression term2 = new Expression(interpreter.tokenManager.nextToken()).create();
+                interpreter.tokenManager.nextToken();
+                Expression term2 = new Expression(ctx).create();
 
                 if (Objects.equals(op.value, "*")){
                     if (term1.value instanceof String && term2.value instanceof Double){

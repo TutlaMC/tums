@@ -17,13 +17,13 @@ public class Utils {
             eventMappings.add(name.name());
         }
     }
-    public Object getType(Object token) {
+    public Object getType(Object token, TusanContext ctx) {
         Object e;
         Class<?> type_;
 
         if (token instanceof Token) {
             try {
-                e = new Expression((Token) token).create();
+                e = new Expression(ctx).create();
                 type_ = e == null ? null : e.getClass();
             } catch (Exception ex) {
                 return "<JAVA:ERROR>";

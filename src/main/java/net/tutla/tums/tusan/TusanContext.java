@@ -35,4 +35,8 @@ public class TusanContext {
     public Token nextToken(){
         return tokenContext.nextToken();
     }
+
+    public Interpreter getInterpreter(){
+        return interpreter;
+    }
 }

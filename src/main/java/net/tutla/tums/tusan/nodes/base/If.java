@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.base;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
@@ -15,12 +16,12 @@ public class If extends Node {
     private Boolean runIf;
     private Boolean runElse;
 
-    public If(Token token){
-        super(token);
+    public If(TusanContext ctx){
+        super(ctx);
     }
 
     public If create(){
-        this.condition = new Condition(token).create();
+        this.condition = new Condition(ctx).create();
         interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "then");
 
         Boolean runIf = condition.value;
@@ -40,7 +41,8 @@ public class If extends Node {
             } else if ((nxt.type == PrebuiltTusanTokenType.KEYWORD && nxt.value.equals("elseif")) && structures == 0) {
                 interpreter.tokenManager.nextToken();
                 if (runIf == false){
-                    condition = new Condition(interpreter.tokenManager.nextToken()).create();
+                    interpreter.tokenManager.nextToken();
+                    condition = new Condition(ctx).create();
                     if (condition.value){
                         interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "then");
                         runIf = true;
@@ -68,7 +70,7 @@ public class If extends Node {
                 Token e = interpreter.tokenManager.nextToken();
 
                 if (runIf == true || runElse){
-                    new Statement(e).create();
+                    new Statement(ctx).create();
                 } else {
                     if (nxt.type== PrebuiltTusanTokenType.STRUCTURE){
                         structures++;

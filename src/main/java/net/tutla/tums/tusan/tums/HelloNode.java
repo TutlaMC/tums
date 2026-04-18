@@ -1,12 +1,13 @@
 package net.tutla.tums.tusan.tums;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.node.Node;
 
 public class HelloNode extends Node {
 
-    public HelloNode(Token token) {
-        super(token);
+    public HelloNode(TusanContext ctx) {
+        super(ctx);
     }
 
     public HelloNode create(){

@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan.nodes.base.loops;
 
+import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
@@ -11,8 +12,8 @@ public class While extends Node {
     public int endPos;
     public boolean cond;
 
-    public While(Token token){
-        super(token);
+    public While(TusanContext ctx){
+        super(ctx);
         currentPos = interpreter.pos;
         endPos = currentPos;
     }
@@ -52,7 +53,7 @@ public class While extends Node {
             } else if (nxt.type == PrebuiltTusanTokenType.STRUCTURE) {
                 structures++;
             } else {
-                new Statement(nxt).create();
+                new Statement(ctx).create();
             }
         }
         interpreter.pos = endPos;
@@ -62,7 +63,7 @@ public class While extends Node {
 
     public void check(){
         interpreter.pos = currentPos;
-        Condition condition = new Condition(token).create();
+        Condition condition = new Condition(ctx).create();
         interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "do");
         cond = condition.value;
     }
