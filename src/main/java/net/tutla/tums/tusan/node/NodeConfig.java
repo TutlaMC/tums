@@ -10,7 +10,9 @@ public class NodeConfig {
     private TokenType END;
 
     private boolean category;
-    private final HashMap<TokenType, Class<? extends Node>> effectiveTokens = new HashMap<>();
+    private boolean forceUseCustom; // for ppl who want their own node implementation on top of the template
+
+    private final Token2NodeMap effectiveTokens = new Token2NodeMap();
 
     private SyntaxPattern syntax;
 
@@ -20,14 +22,22 @@ public class NodeConfig {
 
     public void addCategoryToken(TokenType e,  Class<? extends Node> node){ // TODO: TokenType should be SyntaxPattern
         category = true;
-        effectiveTokens.put(e, node);
+        effectiveTokens.add(e, node);
     }
 
-    public HashMap<TokenType, Class<? extends Node>> getEffectiveTokens(){
+    public Token2NodeMap getEffectiveTokens(){
         return effectiveTokens;
     }
 
     public boolean isCategory(){
         return category;
+    }
+
+    public void setForceUseCustom(boolean custom){
+        forceUseCustom = true;
+    }
+
+    public boolean isUseCustom(){
+        return forceUseCustom;
     }
 }

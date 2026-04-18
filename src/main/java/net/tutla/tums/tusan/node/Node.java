@@ -30,8 +30,9 @@ public class Node {
     }
 
     public Node run(TusanContext ctx){
+        boolean dontRunCreate = false;
         if (nodeConf.isCategory()){
-            nodeConf.getEffectiveTokens().forEach((ttype, node) -> {
+            nodeConf.getEffectiveTokens().getTokenMap().forEach((ttype, node) -> {
                 if (ttype == ctx.getCurrentToken().type){
                     try {
                         Node n = node.getDeclaredConstructor().newInstance();
@@ -43,7 +44,11 @@ public class Node {
                 }
             });
 
-            return this;
+            dontRunCreate = true;
+        }
+
+        if (dontRunCreate && !nodeConf.isUseCustom()){
+            create();
         }
 
         return this;

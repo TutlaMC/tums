@@ -3,6 +3,7 @@ package net.tutla.tums.tusan.lang;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.*;
+import net.tutla.tums.tusan.node.Token2NodeMap;
 import net.tutla.tums.tusan.nodes.Statement;
 import net.tutla.tums.tusan.nodes.base.Return;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public class Tusan {
     private final TusanLanguage lang = new TusanLanguage();
     private final List<Class<? extends Node>> nodes = new ArrayList<>();
+
+    private Token2NodeMap statementNodeMap = new Token2NodeMap();
 
     private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of(
             new LexerRule(PrebuiltTusanTokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
@@ -39,7 +42,7 @@ public class Tusan {
         registerAllDefaultRules();
     }
 
-    // registering
+    ////////////////// registering NODES
     public void registerNode(Class<? extends Node> node){
         // TODO: Verify if node already exists
         // TODO: Nodes should be able to be linked to: 1) the main statement loop and its direct descendants (Effects/Structures) 2) Expressions/Terms/Factors
@@ -50,6 +53,12 @@ public class Tusan {
         return nodes;
     }
 
+    public void linkNodeToStatement(TokenType tokenType, Class<? extends Node> node){
+        statementNodeMap.add(tokenType, node);
+    }
+
+    /// /////////////////////////////
+
     public void registerLexerRule(LexerRule rule){
         lang.registerRule(rule);
     }
@@ -57,6 +66,8 @@ public class Tusan {
     private void registerAllDefaultRules(){
         DEFAULT_LEXER_RULES.forEach(this::registerLexerRule);
     }
+
+    /// //////////////////////////////
 
     public void compile(TusanContext ctx){
         if (!ctx.isFunction){
