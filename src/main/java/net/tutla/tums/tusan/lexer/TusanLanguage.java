@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TusanLanguage {
+public class TusanLanguage { // this is the syntax register
     private final List<LexerRule> RULES = new ArrayList<>();
     private Pattern MASTER = null;
 

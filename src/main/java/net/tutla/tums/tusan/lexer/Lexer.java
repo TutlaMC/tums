@@ -3,7 +3,7 @@ package net.tutla.tums.tusan.lexer;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
-import net.tutla.tums.tusan.lexer.util.prebuilt.PresbuiltTusanTokenGroup;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,32 +64,32 @@ public class Lexer {
                     String value = matcher.group("IDENTIFIER");
 
                     if (keywords.contains(value)) {
-                        register(PrebuiltTusanTokenType.KEYWORD, value, PresbuiltTusanTokenGroup.KEYWORD);
+                        register(PrebuiltTusanTokenType.KEYWORD, value, PrebuiltTusanTokenGroup.KEYWORD);
                     } else if (effects.contains(value)) {
-                        register(PrebuiltTusanTokenType.EFFECT, value, PresbuiltTusanTokenGroup.EFFECT);
+                        register(PrebuiltTusanTokenType.EFFECT, value, PrebuiltTusanTokenGroup.EFFECT);
                     } else if (structures.contains(value)) {
-                        register(PrebuiltTusanTokenType.STRUCTURE, value, PresbuiltTusanTokenGroup.STRUCTURE);
+                        register(PrebuiltTusanTokenType.STRUCTURE, value, PrebuiltTusanTokenGroup.STRUCTURE);
                     } else if (value.equals("end")) {
-                        register(PrebuiltTusanTokenType.ENDSTRUCTURE, value, PresbuiltTusanTokenGroup.NONE);
+                        register(PrebuiltTusanTokenType.ENDSTRUCTURE, value, PrebuiltTusanTokenGroup.NONE);
                     } else if (Arrays.asList("return","break").contains(value)) {
-                        register(PrebuiltTusanTokenType.BREAKSTRUCTURE, value, PresbuiltTusanTokenGroup.NONE);
+                        register(PrebuiltTusanTokenType.BREAKSTRUCTURE, value, PrebuiltTusanTokenGroup.NONE);
                     } else if (types != null && types.contains(value)) {
-                        register(PrebuiltTusanTokenType.TYPE, value, PresbuiltTusanTokenGroup.TYPE);
+                        register(PrebuiltTusanTokenType.TYPE, value, PrebuiltTusanTokenGroup.TYPE);
                     } else if (Utils.isEventType(value)) {
-                        register(PrebuiltTusanTokenType.EVENT, value, PresbuiltTusanTokenGroup.EVENT);
+                        register(PrebuiltTusanTokenType.EVENT, value, PrebuiltTusanTokenGroup.EVENT);
                     } else if (timeReprs.contains(value)) {
                         String timeValue = value.endsWith("s") ?
                                 value.substring(0, value.length() - 1) : value;
-                        register(PrebuiltTusanTokenType.TIME, timeValue, PresbuiltTusanTokenGroup.NONE);
+                        register(PrebuiltTusanTokenType.TIME, timeValue, PrebuiltTusanTokenGroup.NONE);
                     } else {
-                        register(PrebuiltTusanTokenType.IDENTIFIER, value, PresbuiltTusanTokenGroup.IDENTIFIER);
+                        register(PrebuiltTusanTokenType.IDENTIFIER, value, PrebuiltTusanTokenGroup.IDENTIFIER);
                     }
                 } else if (matcher.group("WHITESPACE") != null) {
                 }
             }
         }
 
-        register(PrebuiltTusanTokenType.ENDSCRIPT, "", PresbuiltTusanTokenGroup.NONE);
+        register(PrebuiltTusanTokenType.ENDSCRIPT, "", PrebuiltTusanTokenGroup.NONE);
         return tokens;
     }
 }

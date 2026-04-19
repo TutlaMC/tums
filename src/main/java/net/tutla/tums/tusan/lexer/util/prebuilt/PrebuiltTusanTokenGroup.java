@@ -2,7 +2,7 @@ package net.tutla.tums.tusan.lexer.util.prebuilt;
 
 import net.tutla.tums.tusan.lexer.TokenGroup;
 
-public enum PresbuiltTusanTokenGroup implements TokenGroup {
+public enum PrebuiltTusanTokenGroup implements TokenGroup {
     NONE,
 
     STRUCTURE,

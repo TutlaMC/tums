@@ -15,10 +15,9 @@ import net.tutla.tums.tusan.tums.TumsTokenType;
 
 public class Interpreter {
 
-    private Tusan tusan = new Tusan();
-    private TusanLanguage lang = tusan.getLang();
+    private final Tusan tusan;
+    private TusanLanguage lang;
 
-    private Lexer lexer;
     public Utils util = new Utils();
 
     public InterpreterData data;
@@ -37,9 +36,13 @@ public class Interpreter {
     public Token currentToken;
 
 
-    public Interpreter() {
+    public Interpreter(Tusan tusan) {
+        this.tusan = tusan;
+        this.lang = tusan.getLang();
+        // where api testing goes
         tusan.registerLexerRule(new LexerRule(TumsTokenType.HELLO, "\\bhello\\b"));
         tusan.registerNode(HelloNode.class);
+        /// /////////////////////
     }
 
     public void setup(InterpreterData data, TokenManager tknmanager, String _text, Path file){
@@ -58,7 +61,7 @@ public class Interpreter {
         }
 
         if (tknmanager == null){
-            lexer = new Lexer(this.text, this, lang);
+            Lexer lexer = new Lexer(this.text, this, lang);
             tokenManager.setTokens(lexer.classify());
         } else {
             tokenManager.setTokens(tknmanager.getAll());
@@ -82,13 +85,8 @@ public class Interpreter {
             System.out.print("\n");
         } */
 
-        // where api testing goes
-
-
-        /// /////////////////////
-
         TusanContext ctx = new TusanContext(this);
-       tusan.compile(ctx);
+        tusan.compile(ctx);
     }
 
     // utils
@@ -167,12 +165,16 @@ public class Interpreter {
     }
 
     public Interpreter clone(){
-        Interpreter intr = new Interpreter();
+        Interpreter intr = new Interpreter(tusan);
         intr.setup(data, tokenManager, text, filePath);
         return intr;
     }
 
     public void setLanguage(TusanLanguage lang){
         this.lang = lang;
+    }
+
+    public Tusan getTusan(){
+        return tusan;
     }
 }

@@ -6,6 +6,7 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.interpreter.TokenManager;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.node.NodeConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,10 @@ public class On extends Node {
 
     public On(TusanContext ctx){
         super(ctx);
+        setNodeConfig(
+                new NodeConfig()
+                        .setDontSendNextToken(true)
+        );
     }
 
     public On create(){
@@ -42,7 +47,7 @@ public class On extends Node {
 
             }
             tokens.add(new Token(PrebuiltTusanTokenType.ENDSCRIPT, "event", interpreter));
-            Interpreter intr = new Interpreter();
+            Interpreter intr = new Interpreter(ctx.getTusan());
             TokenManager e = new TokenManager(intr);
             e.setTokens(tokens);
             intr.setup(interpreter.data,e,

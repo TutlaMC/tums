@@ -5,8 +5,9 @@ import net.tutla.tums.tusan.lexer.TokenType;
 public class NodeConfig {
     private TokenType END;
 
-    private boolean category;
-    private boolean forceUseCustom; // for ppl who want their own node implementation on top of the template
+    private boolean category = false;
+    private boolean forceUseCustom = false; // for ppl who want their own node implementation on top of the template
+    private boolean dontSendNext = false;
 
     private final Token2NodeMap effectiveTokens = new Token2NodeMap();
 
@@ -37,5 +38,14 @@ public class NodeConfig {
 
     public boolean isUseCustom(){
         return forceUseCustom;
+    }
+
+    public boolean isDontSendNext() {
+        return dontSendNext;
+    }
+
+    public NodeConfig setDontSendNextToken(boolean dontSendNext) {
+        this.dontSendNext = dontSendNext;
+        return this;
     }
 }

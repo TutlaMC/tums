@@ -1,18 +1,15 @@
 package net.tutla.tums.tusan.nodes;
 
 import net.tutla.tums.tusan.TusanContext;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenGroup;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
-import net.tutla.tums.tusan.nodes.base.If;
 import net.tutla.tums.tusan.nodes.base.Return;
-import net.tutla.tums.tusan.nodes.base.function.FunctionNode;
-import net.tutla.tums.tusan.nodes.base.loops.Loop;
-import net.tutla.tums.tusan.nodes.base.loops.While;
 import net.tutla.tums.tusan.nodes.expression.Expression;
-import net.tutla.tums.tusan.nodes.tums.On;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Statement extends Node {
     private final List<PrebuiltTusanTokenType> validTypes = Arrays.asList(PrebuiltTusanTokenType.STRUCTURE, PrebuiltTusanTokenType.KEYWORD, PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.EFFECT, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING); // TODO: get from util or lang
@@ -32,31 +29,28 @@ public class Statement extends Node {
             interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_CURLY);
             return value;
         }
-        if (validTypes.contains(token.type)){
+        if (validTypes.contains(token.type) || token.group == PrebuiltTusanTokenGroup.STRUCTURE){
             if (token.type == PrebuiltTusanTokenType.EFFECT){
                 value = new Effect(ctx).create();
-            } else if (token.type == PrebuiltTusanTokenType.STRUCTURE){
-                switch (token.value) {
-                    case "if" -> {
-                        interpreter.tokenManager.nextToken();
-                        new If(ctx).create();
-                    }
-                    case "while" -> {
-                        interpreter.tokenManager.nextToken();
-                        new While(ctx).create();
-                    }
-                    case "loop" -> {
-                        interpreter.tokenManager.nextToken();
-                        new Loop(ctx).create();
-                    }
-                    case "on" -> new On(ctx).create();
-                    case "function" -> {
-                        interpreter.tokenManager.nextToken();
-                        new FunctionNode(ctx).create();
-                    }
-                    default ->
-                            interpreter.error("UnexpectedToken", "Structure " + token.type.name() + ":" + token.value + " has no definition", null);
+            } else if (token.group == PrebuiltTusanTokenGroup.STRUCTURE){
+                AtomicBoolean execed = new AtomicBoolean(false);
+                ctx.getTusan().getStatementNodeMap().getTokenMap()
+                        .forEach((tok, node) -> {
+                            if (token.type == tok){
+                                // TODO: full node execution based on config
+                                Node newNode = TusanContext.instantiateNode(node, ctx);
+                                if(!newNode.getNodeConfig().isDontSendNext()) {
+                                    ctx.nextToken();
+                                }
+                                newNode.run(ctx);
+                                execed.set(true);
+                            }
+                });
+                if (!execed.get()){
+                    interpreter.error("UnexpectedToken", "Structure " + token.type.name() + ":" + token.value + " has no definition", null);
                 }
+
+
             } else if (Arrays.asList(PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING, PrebuiltTusanTokenType.KEYWORD).contains(token.type)){
                 value = new Expression(ctx).create();
             } else if (token.type ==  PrebuiltTusanTokenType.BREAKSTRUCTURE){

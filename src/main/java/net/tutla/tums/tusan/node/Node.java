@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Node {
     public Interpreter interpreter;
     public TusanContext ctx;
-    private NodeConfig nodeConf;
+    private NodeConfig nodeConf = new NodeConfig();
     public Token token;
 
     public Node(TusanContext ctx){
@@ -27,12 +27,12 @@ public class Node {
         nodeConf = conf;
     }
 
-    public void check(){
+    public void verify(){
 
     }
 
     public Node run(TusanContext ctx){
-        boolean dontRunCreate = false;
+        boolean runCreate = true;
         if (nodeConf.isCategory()){
             nodeConf.getEffectiveTokens().getTokenMap().forEach((ttype, node) -> {
                 if (ttype == ctx.getCurrentToken().type){
@@ -46,10 +46,10 @@ public class Node {
                 }
             });
 
-            dontRunCreate = true;
+            runCreate = false;
         }
 
-        if (dontRunCreate && !nodeConf.isUseCustom()){
+        if (runCreate && !nodeConf.isUseCustom()){
             create();
         }
 

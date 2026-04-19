@@ -1,13 +1,19 @@
 package net.tutla.tums.tusan.lang;
 
 import net.tutla.tums.tusan.lexer.util.WordedPattern;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenGroup;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.*;
 import net.tutla.tums.tusan.node.Token2NodeMap;
 import net.tutla.tums.tusan.nodes.Statement;
+import net.tutla.tums.tusan.nodes.base.If;
 import net.tutla.tums.tusan.nodes.base.Return;
+import net.tutla.tums.tusan.nodes.base.function.FunctionNode;
+import net.tutla.tums.tusan.nodes.base.loops.Loop;
+import net.tutla.tums.tusan.nodes.base.loops.While;
+import net.tutla.tums.tusan.nodes.tums.On;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +22,7 @@ public class Tusan {
     private final TusanLanguage lang = new TusanLanguage();
     private final List<Class<? extends Node>> nodes = new ArrayList<>();
 
-    private Token2NodeMap statementNodeMap = new Token2NodeMap();
+    private final Token2NodeMap statementNodeMap = new Token2NodeMap();
 
     private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of(
             new LexerRule(PrebuiltTusanTokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
@@ -29,19 +35,31 @@ public class Tusan {
             new LexerRule(PrebuiltTusanTokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"),
             new LexerRule(PrebuiltTusanTokenType.EQUAL, "="),
 
-            new LexerRule(PrebuiltTusanTokenType.LEFT_CURLY, "\\{"),
-            new LexerRule(PrebuiltTusanTokenType.RIGHT_CURLY, "\\}"),
-            new LexerRule(PrebuiltTusanTokenType.LEFT_PAR, "\\("),
-            new LexerRule(PrebuiltTusanTokenType.RIGHT_PAR, "\\)"),
-            new LexerRule(PrebuiltTusanTokenType.LEFT_SQUARE, "\\["),
-            new LexerRule(PrebuiltTusanTokenType.RIGHT_SQUARE, "\\]"),
+            new LexerRule(PrebuiltTusanTokenType.LEFT_CURLY, WordedPattern.makeSpecialCharacterPattern('{')),
+            new LexerRule(PrebuiltTusanTokenType.RIGHT_CURLY, WordedPattern.makeSpecialCharacterPattern('}')),
+            new LexerRule(PrebuiltTusanTokenType.LEFT_PAR, WordedPattern.makeSpecialCharacterPattern('(')),
+            new LexerRule(PrebuiltTusanTokenType.RIGHT_PAR, WordedPattern.makeSpecialCharacterPattern(')')),
+            new LexerRule(PrebuiltTusanTokenType.LEFT_SQUARE, WordedPattern.makeSpecialCharacterPattern('[')),
+            new LexerRule(PrebuiltTusanTokenType.RIGHT_SQUARE, WordedPattern.makeSpecialCharacterPattern(']')),
             new LexerRule(PrebuiltTusanTokenType.SEMICOLON, ";"),
             new LexerRule(PrebuiltTusanTokenType.COLON, ":"),
-            new LexerRule(PrebuiltTusanTokenType.COMMA, ",")
+            new LexerRule(PrebuiltTusanTokenType.COMMA, ","),
+
+            new LexerRule(PrebuiltTusanTokenType.IF, WordedPattern.makeOneWordPattern("if"))
+                    .setGroup(PrebuiltTusanTokenGroup.STRUCTURE),
+            new LexerRule(PrebuiltTusanTokenType.WHILE, WordedPattern.makeOneWordPattern("while"))
+                    .setGroup(PrebuiltTusanTokenGroup.STRUCTURE),
+            new LexerRule(PrebuiltTusanTokenType.LOOP, WordedPattern.makeOneWordPattern("loop"))
+                    .setGroup(PrebuiltTusanTokenGroup.STRUCTURE),
+            new LexerRule(PrebuiltTusanTokenType.ON, WordedPattern.makeOneWordPattern("on"))
+                    .setGroup(PrebuiltTusanTokenGroup.STRUCTURE),
+            new LexerRule(PrebuiltTusanTokenType.FUNCTION, WordedPattern.makeOneWordPattern("function"))
+                    .setGroup(PrebuiltTusanTokenGroup.STRUCTURE)
     );
 
     public Tusan(){
         registerAllDefaultRules();
+        registerAllDefaultNodes();
     }
 
     ////////////////// registering NODES
@@ -59,6 +77,10 @@ public class Tusan {
         statementNodeMap.add(tokenType, node);
     }
 
+    public Token2NodeMap getStatementNodeMap(){
+        return statementNodeMap;
+    }
+
     /// /////////////////////////////
 
     public void registerLexerRule(LexerRule rule){
@@ -67,6 +89,14 @@ public class Tusan {
 
     private void registerAllDefaultRules(){
         DEFAULT_LEXER_RULES.forEach(this::registerLexerRule);
+    }
+
+    private void registerAllDefaultNodes(){
+        linkNodeToStatement(PrebuiltTusanTokenType.IF, If.class);
+        linkNodeToStatement(PrebuiltTusanTokenType.WHILE, While.class);
+        linkNodeToStatement(PrebuiltTusanTokenType.LOOP, Loop.class);
+        linkNodeToStatement(PrebuiltTusanTokenType.ON, On.class);
+        linkNodeToStatement(PrebuiltTusanTokenType.FUNCTION, FunctionNode.class);
     }
 
     /// //////////////////////////////

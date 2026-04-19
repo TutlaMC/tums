@@ -17,7 +17,7 @@ import java.util.List;
 public class FunctionNode extends Node { // named this way to avoid any conflicts
     String name = token.value;
     public List<FunctionParameter> parameters = new ArrayList<>();
-    public Interpreter functionInterpreter = new Interpreter();
+    public Interpreter functionInterpreter = new Interpreter(ctx.getTusan());
 
     public FunctionNode(TusanContext ctx){
         super(ctx);

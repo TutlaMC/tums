@@ -20,4 +20,8 @@ public class WordedPattern {
         str.append(")\\b");
         return str.toString();
     }
+
+    public static String makeSpecialCharacterPattern(char e){
+        return "\\"+e;
+    }
 }
