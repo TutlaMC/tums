@@ -5,6 +5,7 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 public class Token {
 
     public TokenType type;
+    public TokenGroup group;
     public String value;
     public Interpreter interpreter;
 
@@ -12,5 +13,10 @@ public class Token {
         this.type = type;
         this.value = value;
         this.interpreter = interpreter;
+    }
+
+    public Token setGroup(TokenGroup group){
+        this.group = group;
+        return this;
     }
 }

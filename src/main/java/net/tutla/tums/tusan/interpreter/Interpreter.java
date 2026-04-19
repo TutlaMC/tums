@@ -16,7 +16,8 @@ import net.tutla.tums.tusan.tums.TumsTokenType;
 
 public class Interpreter {
 
-    private TusanLanguage lang = new Tusan().getLang();
+    private Tusan tusan = new Tusan();
+    private TusanLanguage lang = tusan.getLang();
 
     private Lexer lexer;
     public Utils util = new Utils();
@@ -38,7 +39,8 @@ public class Interpreter {
 
 
     public Interpreter() {
-
+        tusan.registerLexerRule(new LexerRule(TumsTokenType.HELLO, "\\bhello\\b"));
+        tusan.registerNode(HelloNode.class);
     }
 
     public void setup(InterpreterData data, TokenManager tknmanager, String _text, Path file){
@@ -81,15 +83,13 @@ public class Interpreter {
             System.out.print("\n");
         } */
 
-        Tusan test = new Tusan();
         // where api testing goes
-        test.registerLexerRule(new LexerRule(TumsTokenType.HELLO, "\\bhello\\b"));
-        test.registerNode(HelloNode.class);
+
 
         /// /////////////////////
 
         TusanContext ctx = new TusanContext(this);
-        test.compile(ctx);
+       tusan.compile(ctx);
     }
 
     // utils

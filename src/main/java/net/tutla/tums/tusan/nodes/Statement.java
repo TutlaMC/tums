@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Statement extends Node {
-    private final List<PrebuiltTusanTokenType> validTypes = Arrays.asList(PrebuiltTusanTokenType.STRUCTURE, PrebuiltTusanTokenType.KEYWORD, PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.EFFECT, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING);
+    private final List<PrebuiltTusanTokenType> validTypes = Arrays.asList(PrebuiltTusanTokenType.STRUCTURE, PrebuiltTusanTokenType.KEYWORD, PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.EFFECT, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING); // TODO: get from util or lang
     public Statement(TusanContext ctx){
         super(ctx);
     }
@@ -37,22 +37,26 @@ public class Statement extends Node {
             if (token.type == PrebuiltTusanTokenType.EFFECT){
                 value = new Effect(ctx).create();
             } else if (token.type == PrebuiltTusanTokenType.STRUCTURE){
-                if (token.value.equals("if")){
-                    interpreter.tokenManager.nextToken();
-                    new If(ctx).create();
-                } else if (token.value.equals("while")) {
-                    interpreter.tokenManager.nextToken();
-                    new While(ctx).create();
-                } else if (token.value.equals("loop")) {
-                    interpreter.tokenManager.nextToken();
-                    new Loop(ctx).create();
-                } else if (token.value.equals("on")) {
-                    new On(ctx).create();
-                } else if (token.value.equals("function")) {
-                    interpreter.tokenManager.nextToken();
-                    new FunctionNode(ctx).create();
-                } else {
-                    interpreter.error("UnexpectedToken", "Structure "+token.type.name()+":"+token.value+" has no definition", null);
+                switch (token.value) {
+                    case "if" -> {
+                        interpreter.tokenManager.nextToken();
+                        new If(ctx).create();
+                    }
+                    case "while" -> {
+                        interpreter.tokenManager.nextToken();
+                        new While(ctx).create();
+                    }
+                    case "loop" -> {
+                        interpreter.tokenManager.nextToken();
+                        new Loop(ctx).create();
+                    }
+                    case "on" -> new On(ctx).create();
+                    case "function" -> {
+                        interpreter.tokenManager.nextToken();
+                        new FunctionNode(ctx).create();
+                    }
+                    default ->
+                            interpreter.error("UnexpectedToken", "Structure " + token.type.name() + ":" + token.value + " has no definition", null);
                 }
             } else if (Arrays.asList(PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING, PrebuiltTusanTokenType.KEYWORD).contains(token.type)){
                 value = new Expression(ctx).create();

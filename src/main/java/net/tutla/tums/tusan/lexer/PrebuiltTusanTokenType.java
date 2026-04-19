@@ -1,6 +1,6 @@
 package net.tutla.tums.tusan.lexer;
 
-public enum PrebuiltTusanTokenType implements TokenType {
+public enum PrebuiltTusanTokenType implements TokenType { // these are currently all groups, TODO: make these all individual keyword tokens
     // types
     STRING,
     NUMBER,
@@ -35,5 +35,12 @@ public enum PrebuiltTusanTokenType implements TokenType {
     RIGHT_SQUARE,
     SEMICOLON,
     COLON,
-    COMMA
+    COMMA,
+
+    IF,
+    WHILE,
+    ON,
+    LOOP,
+    FUNCTION,
+
 }
