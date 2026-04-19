@@ -1,5 +1,7 @@
 package net.tutla.tums.tusan.lang;
 
+import net.tutla.tums.tusan.lexer.util.WordedPattern;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.*;
@@ -19,12 +21,12 @@ public class Tusan {
     private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of(
             new LexerRule(PrebuiltTusanTokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
             new LexerRule(PrebuiltTusanTokenType.NUMBER, "\\d+(\\.\\d+)?"),
-            new LexerRule(PrebuiltTusanTokenType.BOOL, "\\b(true|false)\\b"),
-            new LexerRule(PrebuiltTusanTokenType.NOTHING, "\\bnothing\\b"),
+            new LexerRule(PrebuiltTusanTokenType.BOOL, WordedPattern.makeWordedPattern(List.of("true", "false")) ),
+            new LexerRule(PrebuiltTusanTokenType.NOTHING, WordedPattern.makeOneWordPattern("nothing")),
 
             new LexerRule(PrebuiltTusanTokenType.OPERATOR, "[+\\-*/%]"),
             new LexerRule(PrebuiltTusanTokenType.LOGIC, "(?:\\b(?:and|or|not|contains|in)\\b|\\|\\||&&)"),
-            new LexerRule(PrebuiltTusanTokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"), // ← Fixed name
+            new LexerRule(PrebuiltTusanTokenType.COMPARISON, ">=|<=|==|!=|>|<|\\bis\\b"),
             new LexerRule(PrebuiltTusanTokenType.EQUAL, "="),
 
             new LexerRule(PrebuiltTusanTokenType.LEFT_CURLY, "\\{"),

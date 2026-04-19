@@ -6,8 +6,7 @@ import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.interpreter.Interpreter;
-import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
 import java.util.HashMap;

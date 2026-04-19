@@ -1,9 +1,11 @@
 package net.tutla.tums.tusan.lexer;
 
+import net.tutla.tums.tusan.lexer.util.prebuilt.PresbuiltTusanTokenGroup;
+
 public class LexerRule {
     public final TokenType type;
     public final String regex;
-    public TokenGroup group;
+    public TokenGroup group= PresbuiltTusanTokenGroup.NONE;
 
     public LexerRule(TokenType type, String regex) {
         this.type = type;

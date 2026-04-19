@@ -5,7 +5,7 @@ import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.interpreter.TokenManager;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 
 import java.util.ArrayList;
 import java.util.List;

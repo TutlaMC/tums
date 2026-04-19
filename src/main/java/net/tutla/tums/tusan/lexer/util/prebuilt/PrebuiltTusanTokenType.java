@@ -1,4 +1,6 @@
-package net.tutla.tums.tusan.lexer;
+package net.tutla.tums.tusan.lexer.util.prebuilt;
+
+import net.tutla.tums.tusan.lexer.TokenType;
 
 public enum PrebuiltTusanTokenType implements TokenType { // these are currently all groups, TODO: make these all individual keyword tokens
     // types

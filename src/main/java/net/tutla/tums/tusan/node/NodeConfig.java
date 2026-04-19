@@ -2,10 +2,6 @@ package net.tutla.tums.tusan.node;
 
 import net.tutla.tums.tusan.lexer.TokenType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class NodeConfig {
     private TokenType END;
 
@@ -20,9 +16,10 @@ public class NodeConfig {
         // TODO: add various templates
     }
 
-    public void addCategoryToken(TokenType e,  Class<? extends Node> node){ // TODO: TokenType should be SyntaxPattern
+    public NodeConfig addCategoryToken(TokenType e,  Class<? extends Node> node){ // TODO: TokenType should be SyntaxPattern
         category = true;
         effectiveTokens.add(e, node);
+        return this;
     }
 
     public Token2NodeMap getEffectiveTokens(){
@@ -33,8 +30,9 @@ public class NodeConfig {
         return category;
     }
 
-    public void setForceUseCustom(boolean custom){
+    public NodeConfig setForceUseCustom(boolean custom){
         forceUseCustom = true;
+        return this;
     }
 
     public boolean isUseCustom(){

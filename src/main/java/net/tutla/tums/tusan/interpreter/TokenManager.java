@@ -1,7 +1,7 @@
 package net.tutla.tums.tusan.interpreter;
 
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

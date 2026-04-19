@@ -3,7 +3,7 @@ package net.tutla.tums.tusan.nodes.base;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.Statement;
 import net.tutla.tums.tusan.nodes.expression.Condition;
 

@@ -2,8 +2,7 @@ package net.tutla.tums.tusan.nodes.expression;
 
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
-import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 
 public class Condition extends Node {
     public Boolean value;

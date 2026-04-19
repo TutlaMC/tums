@@ -3,7 +3,7 @@ package net.tutla.tums.tusan;
 import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
-import net.tutla.tums.tusan.lexer.PrebuiltTusanTokenType;
+import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 import net.tutla.tums.tusan.tums.EventType;
 
