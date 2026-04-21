@@ -21,14 +21,11 @@ public class Factor extends Node {
 
     public Factor create(){
         value = token.value;
-        if (token.type == PrebuiltTusanTokenType.OPERATOR && token.value == "-"){
-            if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.NUMBER){
-                String e = interpreter.tokenManager.nextToken().value;
-                interpreter.currentToken = new Token(PrebuiltTusanTokenType.NUMBER, "-"+e, interpreter);
-                token = interpreter.currentToken;
-            }
-        }
-        if (token.type == PrebuiltTusanTokenType.NUMBER){
+        if (token.type == PrebuiltTusanTokenType.OPERATOR && "-".equals(token.value)) {
+            interpreter.tokenManager.nextToken();
+            value = -((Double) new Factor(ctx).create().value);
+            return this;
+        } else if (token.type == PrebuiltTusanTokenType.NUMBER){
             this.value = Double.parseDouble(token.value);
             if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.TIME){
                 HashMap<String, Double> timeUnits = new HashMap<>();
@@ -50,14 +47,11 @@ public class Factor extends Node {
         } else if (token.type == PrebuiltTusanTokenType.NOTHING) {
             value = null;
         } else if (token.type == PrebuiltTusanTokenType.TYPE){
-            if (token.value == "NUMBER"){
-                value = Types.NUMBER;
-            } else if (token.value == "STRING"){
-                value = Types.STRING;
-            } else if (token.value == "NOTHING"){
-                value = Types.NOTHING;
-            } else if (token.value == "BOOLEAN"){
-                value = Types.BOOL;
+            switch (token.value) {
+                case "NUMBER" -> value = Types.NUMBER;
+                case "STRING" -> value = Types.STRING;
+                case "NOTHING" -> value = Types.NOTHING;
+                case "BOOLEAN" -> value = Types.BOOL;
             }
         } else if (token.type == PrebuiltTusanTokenType.KEYWORD){
             // WIP
@@ -73,6 +67,9 @@ public class Factor extends Node {
                 interpreter.tokenManager.nextToken();
                 Object list = new Factor(ctx).create().value;
                 if (list instanceof List) {
+                    if (((List<Object>) list).size() <= n){
+                        interpreter.error("OutOfBoundsException", "Tried to index over array's items", null);
+                    }
                     value = ((List<Object>) list).get(n);
                 } else if (list instanceof Map) {
                     int i = 0;
@@ -93,19 +90,22 @@ public class Factor extends Node {
             value = new Expression(ctx).create().value;
             interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_PAR);
         } else if (token.type == PrebuiltTusanTokenType.LEFT_CURLY){ // TSON :fire: (Tutla's Object Notation or Tutla's Shitty Object Notation)
-            HashMap<String, Object> dict = new HashMap<>();
+            LinkedHashMap<String, Object> dict = new LinkedHashMap<>();
             while (interpreter.tokenManager.getNextToken().type != PrebuiltTusanTokenType.RIGHT_CURLY){
                 Token e = interpreter.tokenManager.nextToken();
-                if (e.type == PrebuiltTusanTokenType.STRING){
+                if (e.type == PrebuiltTusanTokenType.STRING || e.type == PrebuiltTusanTokenType.IDENTIFIER){
                     String key = e.value;
                     interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.COLON);
                     interpreter.tokenManager.nextToken();
                     Object val = new Expression(ctx).create().value;
                     dict.put(key, val);
+                } else {
+                    interpreter.error("InvalidTSON", "TSON Key must either be a string or non-keyword (identifier) token", null);
                 }
                 if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.COMMA){
                     interpreter.tokenManager.nextToken();
                 }
+                // TODO: check if no ending RIGHT_CURLY
             }
             interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_CURLY);
             value = dict;
@@ -123,6 +123,7 @@ public class Factor extends Node {
             }
             interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.RIGHT_SQUARE);
             value = list;
+            // TODO: check if no ending RIGHT_SQUARE
         } else {
             interpreter.error("InvalidFactor",value.toString()+" is not a valid factor",null);
         }

@@ -10,6 +10,15 @@ base {
     archivesName = project.archives_base_name
 }
 
+sourceSets {
+    api {
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+}
+
+sourceSets.main.compileClasspath += sourceSets.api.output
+sourceSets.main.runtimeClasspath += sourceSets.api.output
+
 loom {
     splitEnvironmentSourceSets()
 
@@ -17,8 +26,14 @@ loom {
         "tums" {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
+            sourceSet sourceSets.api
         }
     }
+}
+
+afterEvaluate {
+    sourceSets.client.compileClasspath += sourceSets.api.output
+    sourceSets.client.runtimeClasspath += sourceSets.api.output
 }
 
 fabricApi {

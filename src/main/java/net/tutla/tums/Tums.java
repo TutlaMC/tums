@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public class Tums implements ModInitializer {
-    private final Tusan tusan = new Tusan(); // primary language
+    private static final Tusan tusan = new Tusan(); // primary language
 
     public static InterpreterRegistry register = new InterpreterRegistry();
     public static InterpreterRegistry getRegister(){
@@ -24,6 +24,13 @@ public class Tums implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        /*TumsApi.register(new TumsApi() {
+            @Override
+            public Tusan getTusan() {
+                return tusan;
+            }
+        });*/
+
         resolveTumsDir();
         runAllScripts(scriptsDir);
     }

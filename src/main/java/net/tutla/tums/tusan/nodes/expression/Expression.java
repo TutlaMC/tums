@@ -6,6 +6,7 @@ import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Expression extends Node {
@@ -25,12 +26,19 @@ public class Expression extends Node {
                 if (Objects.equals(op.value, "+")){
                     if (term1.value instanceof String && term2.value instanceof String){
                         value = (String) term1.value + (String) term2.value;
-                    } else{
+                    } else if (term1.value instanceof Number && term2.value instanceof Number){
                         assert term1.value instanceof Double;
                         value = (Double) term1.value + (Double) term2.value;
+                    } else {
+                        interpreter.error("TypeError","Invalid types provided to add", List.of("You can only add string+string and number+number"));
                     }
                 } else if (Objects.equals(op.value, "-")) {
-                    value = (Double) term1.value - (Double) term2.value;
+                    if (term1.value instanceof Number && term2.value instanceof Number){
+                        value = (Double) term1.value - (Double) term2.value;
+                    } else {
+                        interpreter.error("TypeError","Invalid types provided to subtract", null);
+                    }
+
                 }
             } else if (op.type == PrebuiltTusanTokenType.COMPARISON){
                 value = compare(op, term1, term2);
@@ -41,16 +49,16 @@ public class Expression extends Node {
         return this;
     }
 
-    private Object compare(Token op, Term term1, Expression term2){
+    private Object compare(Token op, Term term1, Expression term2){ // TODO: Object -> boolean
         switch (op.value) {
             case "<" -> value = (Double) term1.value < (Double) term2.value;
             case ">" -> value = (Double) term1.value > (Double) term2.value;
             case "<=" -> value = (Double) term1.value <= (Double) term2.value;
             case ">=" -> value = (Double) term1.value >= (Double) term2.value;
-            case "!=" -> value = !(term1.value.equals(term2.value));
-            case "==", "is" -> value = term1.value.equals(term2.value);
+            case "!=" -> value = !Objects.equals(term1.value, term2.value);
+            case "==", "is" -> value = Objects.equals(term1.value, term2.value);
             case null, default ->
-                    interpreter.error("InvalidComparison", "Received invalid comparison " + op.value, null);
+                        interpreter.error("InvalidComparison", "Received invalid comparison " + op.value, null);
         }
         return value;
     }

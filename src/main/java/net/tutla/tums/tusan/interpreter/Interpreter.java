@@ -78,7 +78,7 @@ public class Interpreter {
         pos = 0;
         currentToken = tokenManager.get(pos);
 
-        /* for (Token t : tokens){
+        /* for (Token t : tokenManager.getAll()){
             System.out.print(t.type);
             System.out.print(":");
             System.out.print(t.value);
