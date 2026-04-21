@@ -5,10 +5,10 @@ import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.Statement;
-import net.tutla.tums.tusan.nodes.expression.Condition;
+import net.tutla.tums.tusan.nodes.expression.Expression;
 
 public class If extends Node {
-    public Condition condition;
+    public Expression condition;
     public Boolean end = false;
     public Boolean success = false;
     public Integer structures = 0;
@@ -21,10 +21,13 @@ public class If extends Node {
     }
 
     public If create(){
-        this.condition = new Condition(ctx).create();
+        this.condition = new Expression(ctx).create();
         interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "then");
 
-        Boolean runIf = condition.value;
+        if (!(condition.value instanceof Boolean runIf)){
+            interpreter.error("TypeError", "Evaluated expression must return a boolean output", null);
+            return this;
+        }
         boolean runElse = false;
 
         while (!end){
@@ -40,10 +43,10 @@ public class If extends Node {
                 }
             } else if ((nxt.type == PrebuiltTusanTokenType.KEYWORD && nxt.value.equals("elseif")) && structures == 0) {
                 interpreter.tokenManager.nextToken();
-                if (runIf == false){
+                if (!runIf){
                     interpreter.tokenManager.nextToken();
-                    condition = new Condition(ctx).create();
-                    if (condition.value){
+                    condition = new Expression(ctx).create();
+                    if ((boolean) condition.value){
                         interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "then");
                         runIf = true;
                         runElse = false;
@@ -59,7 +62,7 @@ public class If extends Node {
                 }
             } else if((nxt.type == PrebuiltTusanTokenType.KEYWORD && nxt.value.equals("else")) && structures == 0){
                 interpreter.tokenManager.nextToken();
-                if (runIf == false && success == false){
+                if (!runIf && success == false){
                     runElse = true;
                 } else {
                     runElse = false;
@@ -69,7 +72,7 @@ public class If extends Node {
             } else {
                 Token e = interpreter.tokenManager.nextToken();
 
-                if (runIf == true || runElse){
+                if (runIf || runElse){
                     new Statement(ctx).create();
                 } else {
                     if (nxt.type== PrebuiltTusanTokenType.STRUCTURE){

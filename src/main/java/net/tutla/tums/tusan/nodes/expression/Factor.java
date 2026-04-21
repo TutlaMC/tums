@@ -128,7 +128,7 @@ public class Factor extends Node {
             interpreter.error("InvalidFactor",value.toString()+" is not a valid factor",null);
         }
 
-        if ((value instanceof String || value instanceof ArrayList || value instanceof HashMap) && interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.LEFT_SQUARE){
+        if ((value instanceof String || value instanceof List || value instanceof Map) && interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.LEFT_SQUARE){
             // TODO should add indexing similar to native tusan
         }
 

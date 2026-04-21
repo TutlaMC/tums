@@ -5,7 +5,7 @@ import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
 import net.tutla.tums.tusan.nodes.Statement;
-import net.tutla.tums.tusan.nodes.expression.Condition;
+import net.tutla.tums.tusan.nodes.expression.Expression;
 
 public class While extends Node {
     public int currentPos;
@@ -63,8 +63,12 @@ public class While extends Node {
 
     public void check(){
         interpreter.pos = currentPos;
-        Condition condition = new Condition(ctx).create();
+        Expression condition = new Expression(ctx).create();
         interpreter.tokenManager.expectToken(PrebuiltTusanTokenType.KEYWORD, "do");
-        cond = condition.value;
+        if (!(condition.value instanceof Boolean e)){
+            interpreter.error("TypeError", "Evaluated expression must return a boolean output", null);
+            return;
+        }
+        cond = e;
     }
 }

@@ -28,7 +28,8 @@ public class Term extends Node {
                         if (term1.value instanceof String && term2.value instanceof Double) {
                             value = ((String) term1.value).repeat(((Double) term2.value).intValue());
                         } else {
-                            assert term1.value instanceof Double;
+                            if (!(term1.value instanceof Double) || !(term2.value instanceof Double))
+                                interpreter.error("TypeError", "Expected numbers for multiplication", null);
                             value = (Double) term1.value * ((Double) term2.value);
                         }
                     }
