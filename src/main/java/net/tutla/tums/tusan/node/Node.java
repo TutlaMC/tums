@@ -5,6 +5,7 @@ import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.TokenType;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class Node {
@@ -58,5 +59,27 @@ public class Node {
 
     public Object create(){
         return this;
+    }
+
+    public static <T> T instantiateNode(Class<T> clazz, Object... args) { // for creating nodes with custom context.
+        for (Constructor<?> ctor : clazz.getDeclaredConstructors()) {
+            if (ctor.getParameterCount() != args.length) continue;
+            boolean matches = true;
+            for (int i = 0; i < args.length; i++) {
+                if (!ctor.getParameterTypes()[i].isAssignableFrom(args[i].getClass())) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) {
+                ctor.setAccessible(true);
+                try {
+                    return clazz.cast(ctor.newInstance(args));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        throw new RuntimeException("No matching constructor found in " + clazz.getName());
     }
 }

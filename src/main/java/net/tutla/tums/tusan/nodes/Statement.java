@@ -38,7 +38,7 @@ public class Statement extends Node {
                         .forEach((tok, node) -> {
                             if (token.type == tok){
                                 // TODO: full node execution based on config
-                                Node newNode = TusanContext.instantiateNode(node, ctx);
+                                Node newNode = Node.instantiateNode(node, ctx);
                                 if(!newNode.getNodeConfig().isDontSendNext()) {
                                     ctx.nextToken();
                                 }
@@ -49,8 +49,6 @@ public class Statement extends Node {
                 if (!execed.get()){
                     interpreter.error("UnexpectedToken", "Structure " + token.type.name() + ":" + token.value + " has no definition", null);
                 }
-
-
             } else if (Arrays.asList(PrebuiltTusanTokenType.IDENTIFIER, PrebuiltTusanTokenType.LEFT_CURLY, PrebuiltTusanTokenType.NUMBER, PrebuiltTusanTokenType.STRING, PrebuiltTusanTokenType.KEYWORD).contains(token.type)){
                 value = new Expression(ctx).create();
             } else if (token.type ==  PrebuiltTusanTokenType.BREAKSTRUCTURE){

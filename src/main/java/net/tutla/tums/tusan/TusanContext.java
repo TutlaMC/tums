@@ -45,25 +45,5 @@ public class TusanContext {
         return interpreter.getTusan();
     }
 
-    public static <T> T instantiateNode(Class<T> clazz, Object... args) { // for creating nodes with custom context.
-        for (Constructor<?> ctor : clazz.getDeclaredConstructors()) {
-            if (ctor.getParameterCount() != args.length) continue;
-            boolean matches = true;
-            for (int i = 0; i < args.length; i++) {
-                if (!ctor.getParameterTypes()[i].isAssignableFrom(args[i].getClass())) {
-                    matches = false;
-                    break;
-                }
-            }
-            if (matches) {
-                ctor.setAccessible(true);
-                try {
-                    return clazz.cast(ctor.newInstance(args));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        throw new RuntimeException("No matching constructor found in " + clazz.getName());
-    }
+
 }
