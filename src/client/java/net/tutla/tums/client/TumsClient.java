@@ -3,8 +3,10 @@ package net.tutla.tums.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
+import net.minecraft.server.dialog.action.Action;
+import net.minecraft.server.dialog.action.ActionTypes;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.tutla.tums.Tums;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
@@ -23,7 +25,7 @@ public class TumsClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> { // minecraft why did u make me take 2 hours to figure ts out
             if (!mouseCallbackSet && client.getWindow() != null) {
-                long handle = client.getWindow().getHandle();
+                long handle = client.getWindow().handle();
 
                 GLFWMouseButtonCallbackI oldC = GLFW.glfwSetMouseButtonCallback(handle, null);
 
@@ -52,9 +54,9 @@ public class TumsClient implements ClientModInitializer {
         });
 
         AttackEntityCallback.EVENT.register((player, world, hand, target, hitResult) -> {
-            if (world.isClient()) {
+            if (world.isClientSide()) {
                 HashMap<String, Object> variables = new HashMap<>();
-                if (target instanceof PlayerEntity otherPlayer) {
+                if (target instanceof Player otherPlayer) {
                     variables.put("event_player", new TumsPlayer("event_player", otherPlayer));
                     variables.put("event_entity", new TumsEntity("event_entity", target));
                 } else {
@@ -63,7 +65,7 @@ public class TumsClient implements ClientModInitializer {
                 }
                 Utils.executeEvent("attack", variables);
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 }

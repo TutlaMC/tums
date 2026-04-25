@@ -1,13 +1,14 @@
 package net.tutla.tums.tusan.tums.objects;
 
-import net.minecraft.entity.player.PlayerEntity;
+
+import net.minecraft.world.entity.player.Player;
 import net.tutla.tums.tusan.Variable;
 
 import java.util.HashMap;
 
 public class TumsPlayer extends Variable {
-    public PlayerEntity main;
-    public TumsPlayer(String name, PlayerEntity player) {
+    public Player main;
+    public TumsPlayer(String name, Player player) {
         super(name, player, null);
         main = player;
         setProps();
@@ -16,7 +17,7 @@ public class TumsPlayer extends Variable {
     public void setProps(){
         if (main != null){
             properties.put("display_name", main.getDisplayName());
-            properties.put("uuid", main.getUuid());
+            properties.put("uuid", main.getUUID());
 
             // Health & Inventory
             properties.put("health", main.getHealth());
@@ -26,8 +27,8 @@ public class TumsPlayer extends Variable {
             properties.put("y", main.getY());
             properties.put("z", main.getY());
 
-            properties.put("yaw", main.getYaw());
-            properties.put("pitch", main.getPitch());
+            properties.put("yaw", main.getYRot());
+            properties.put("pitch", main.getXRot());
 
             properties.put("javaclass", main);
         }

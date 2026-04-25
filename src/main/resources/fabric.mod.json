@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Tums",
   "description": "",
-  "authors": [],
+  "authors": ["TutlaMC"],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/tums/icon.png",
@@ -28,8 +28,9 @@
     }
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
-    "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "fabricloader": ">=0.19.2",
+    "minecraft": "~26.1.2",
+    "java": ">=25",
+    "fabric-api": "*"
   }
 }

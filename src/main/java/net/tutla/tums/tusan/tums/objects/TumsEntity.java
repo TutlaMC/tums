@@ -1,6 +1,7 @@
 package net.tutla.tums.tusan.tums.objects;
 
-import net.minecraft.entity.Entity;
+
+import net.minecraft.world.entity.Entity;
 import net.tutla.tums.tusan.Variable;
 
 import java.util.Objects;
@@ -23,9 +24,8 @@ public class TumsEntity extends Variable {
         properties.put("x", main.getX());
         properties.put("y", main.getY());
         properties.put("z", main.getY());
-
-        properties.put("yaw", main.getYaw());
-        properties.put("pitch", main.getPitch());
+        properties.put("yaw", main.getYRot());
+        properties.put("pitch", main.getXRot());
 
         properties.put("javaclass", main);
     }

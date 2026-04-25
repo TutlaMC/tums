@@ -103,7 +103,7 @@ public class Tusan {
 
     public void compile(TusanContext ctx){
         if (!ctx.isFunction){
-            System.out.println("================ OUTPUT =============== ee");
+            System.out.println("================ OUTPUT ===============");
         }
         while (ctx.getPos()<= ctx.tokenContext.length()-1){
             Token currentToken = ctx.getCurrentToken();
