@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tusan {
-    private final TusanLanguage lang = new TusanLanguage();
+    private final TusanLanguageRules lang = new TusanLanguageRules();
     private final List<Class<? extends Node>> nodes = new ArrayList<>();
 
     private final Token2NodeMap statementNodeMap = new Token2NodeMap();
@@ -58,8 +58,14 @@ public class Tusan {
     );
 
     public Tusan(){
-        registerAllDefaultRules();
-        registerAllDefaultNodes();
+
+    }
+
+    public static Tusan tusan(){
+        Tusan tsn = new Tusan();
+        tsn.registerAllDefaultRules();
+        tsn.registerAllDefaultNodes();
+        return tsn;
     }
 
     ////////////////// registering NODES
@@ -131,7 +137,7 @@ public class Tusan {
         ctx.interpreter.meetEnd();
     }
 
-    public TusanLanguage getLang(){
+    public TusanLanguageRules getLang(){
         return lang;
     }
 }

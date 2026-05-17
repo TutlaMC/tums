@@ -16,7 +16,7 @@ import net.tutla.tums.tusan.tums.TumsTokenType;
 public class Interpreter {
 
     private final Tusan tusan;
-    private TusanLanguage lang;
+    private TusanLanguageRules lang;
 
     public Utils util = new Utils();
 
@@ -170,7 +170,7 @@ public class Interpreter {
         return intr;
     }
 
-    public void setLanguage(TusanLanguage lang){
+    public void setLanguage(TusanLanguageRules lang){
         this.lang = lang;
     }
 

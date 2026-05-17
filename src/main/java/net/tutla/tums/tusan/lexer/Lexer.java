@@ -15,7 +15,7 @@ public class Lexer {
     public String text;
     private final Interpreter interpreter;
 
-    private TusanLanguage lang;
+    private TusanLanguageRules lang;
 
     private int pos = 0;
     private final StringBuilder currentToken = new StringBuilder();
@@ -32,7 +32,7 @@ public class Lexer {
 
     // event mappings are in tusan.Utils
 
-    public Lexer(String text, Interpreter interpreter, TusanLanguage lang) {
+    public Lexer(String text, Interpreter interpreter, TusanLanguageRules lang) {
         this.text = text;
         this.interpreter = interpreter;
         this.lang = lang;

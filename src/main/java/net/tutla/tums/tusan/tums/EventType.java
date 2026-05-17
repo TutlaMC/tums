@@ -2,6 +2,7 @@ package net.tutla.tums.tusan.tums;
 
 public enum EventType {
     // client side
+    KEY_PRESS,
     LEFT_CLICK,
     LEFT_RELEASE,
     RIGHT_CLICK,

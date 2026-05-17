@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public class Tums implements ModInitializer {
-    private static final Tusan tusan = new Tusan(); // primary language
+    private static final Tusan tusan = Tusan.tusan(); // primary language
 
     public static InterpreterRegistry register = new InterpreterRegistry();
     public static InterpreterRegistry getRegister(){
