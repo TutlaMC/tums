@@ -65,4 +65,8 @@ public class Tums implements ModInitializer {
         register.add(interpreter.data); // why are we doing this?
     }
 
+
+    public static Tusan getTusan(){
+        return tusan;
+    }
 }
