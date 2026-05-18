@@ -1,9 +1,7 @@
-package net.tutla.tums.tusan.tums;
+package net.tutla.tums.tums;
 
 import net.tutla.tums.tusan.TusanContext;
-import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.node.Node;
-import net.tutla.tums.tusan.node.NodeConfig;
 
 public class HelloNode extends Node {
 

@@ -2,7 +2,7 @@ package net.tutla.tums.tusan.interpreter;
 
 import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.nodes.base.function.FunctionRegistry;
-import net.tutla.tums.tusan.tums.EventType;
+import net.tutla.tums.tums.EventType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

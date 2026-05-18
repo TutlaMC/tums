@@ -1,4 +1,4 @@
-package net.tutla.tums.tusan.tums.objects;
+package net.tutla.tums.tums.objects;
 
 
 import net.minecraft.world.entity.Entity;

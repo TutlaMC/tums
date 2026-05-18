@@ -10,8 +10,8 @@ import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.*;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
-import net.tutla.tums.tusan.tums.HelloNode;
-import net.tutla.tums.tusan.tums.TumsTokenType;
+import net.tutla.tums.tums.HelloNode;
+import net.tutla.tums.tums.TumsTokenType;
 
 public class Interpreter {
 
