@@ -1,5 +1,6 @@
 package net.tutla.tums.tums.nodes;
 
+import net.tutla.tums.TumsAPI;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.interpreter.Interpreter;
@@ -26,7 +27,7 @@ public class On extends Node {
     public On create(){
         String eventOriginal = interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.EVENT).value.toUpperCase();
 
-        if (interpreter.util.eventMappings.contains(eventOriginal)){
+        if (TumsAPI.getEventMappings().contains(eventOriginal)){
             Boolean end = false;
 
             while (!end){

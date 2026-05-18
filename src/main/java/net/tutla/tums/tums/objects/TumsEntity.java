@@ -27,6 +27,7 @@ public class TumsEntity extends Variable {
         updateProperty("yaw", main.getYRot());
         updateProperty("pitch", main.getXRot());
 
+
         updateProperty("javaclass", main);
     }
 }

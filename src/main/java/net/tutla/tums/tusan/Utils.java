@@ -1,5 +1,6 @@
 package net.tutla.tums.tusan;
 
+import net.tutla.tums.TumsAPI;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
@@ -10,11 +11,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class Utils {
-    public List<String> eventMappings = new ArrayList<>();
+
     public Utils(){
-        for (EventType name : EventType.values()){
-            eventMappings.add(name.name());
-        }
+
     }
     public Object getType(Object token, TusanContext ctx) {
         Object e;

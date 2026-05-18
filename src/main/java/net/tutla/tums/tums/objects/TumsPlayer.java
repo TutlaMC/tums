@@ -6,10 +6,10 @@ import net.tutla.tums.tusan.Variable;
 
 import java.util.HashMap;
 
-public class TumsPlayer extends Variable {
+public class TumsPlayer extends TumsEntity {
     public Player main;
     public TumsPlayer(String name, Player player) {
-        super(name, player, null);
+        super(name, player);
         main = player;
         setProps();
     }
@@ -22,15 +22,6 @@ public class TumsPlayer extends Variable {
             // Health & Inventory
             updateProperty("health", main.getHealth());
 
-            // Position
-            updateProperty("x", main.getX());
-            updateProperty("y", main.getY());
-            updateProperty("z", main.getY());
-
-            updateProperty("yaw", main.getYRot());
-            updateProperty("pitch", main.getXRot());
-
-            updateProperty("javaclass", main);
         }
 
     }

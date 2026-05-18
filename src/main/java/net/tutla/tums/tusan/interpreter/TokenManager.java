@@ -23,6 +23,10 @@ public class TokenManager {
         }
     }
 
+    public Token getCurrentToken(){
+        return interpreter.currentToken;
+    }
+
     public Token nextToken(){
         Token nxt = getNextToken();
         if (nxt != null){

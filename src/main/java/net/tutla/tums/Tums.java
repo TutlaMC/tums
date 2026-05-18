@@ -2,6 +2,7 @@ package net.tutla.tums;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.tutla.tums.tums.EventType;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lang.Tusan;
 
@@ -24,14 +25,8 @@ public class Tums implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        /*TumsApi.register(new TumsApi() {
-            @Override
-            public Tusan getTusan() {
-                return tusan;
-            }
-        });*/
-
         resolveTumsDir();
+        registerAllDefaultEvents();
         TumsAPI.runAllScripts(scriptsDir, TumsAPI.getGlobalTusan());
     }
 
@@ -43,10 +38,13 @@ public class Tums implements ModInitializer {
         }
     }
 
-
-
-
     public static Tusan getTusan(){
         return tusan;
+    }
+
+    public void registerAllDefaultEvents(){
+        for (EventType name : EventType.values()){
+            TumsAPI.addEvent(name.name());
+        }
     }
 }

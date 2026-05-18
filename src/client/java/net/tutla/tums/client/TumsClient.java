@@ -35,7 +35,7 @@ public class TumsClient implements ClientModInitializer {
                     }
                     if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         if (action == GLFW.GLFW_PRESS){
-                            List<Interpreter> callback = Tums.register.registry.events.get("LEFT_CLICK");
+                            List<Interpreter> callback = TumsAPI.getRegister().registry.events.get("LEFT_CLICK");
                             for (Interpreter executor : callback){
                                 executor.compile();
                             }

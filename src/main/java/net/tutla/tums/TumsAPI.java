@@ -7,6 +7,7 @@ import net.tutla.tums.tusan.lang.Tusan;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,6 +16,15 @@ public class TumsAPI {
     public static InterpreterRegistry getRegister(){
         return Tums.getRegister();
     }
+
+    private static final List<String> eventMappings = new ArrayList<>();
+    public static void addEvent(String name){
+        eventMappings.add(name);
+    }
+    public static List<String> getEventMappings(){
+        return eventMappings;
+    }
+
     public static Tusan blank(){
         return new Tusan();
     }
@@ -22,8 +32,6 @@ public class TumsAPI {
     public static Tusan getGlobalTusan(){
         return Tums.getTusan();
     }
-
-
 
     public static void runAllScripts(Path scriptsDir, Tusan tusan){
         try (Stream<Path> stream = Files.list(scriptsDir)) {
