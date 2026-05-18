@@ -101,15 +101,7 @@ public class Utils {
         return false;
     }
 
-    public static void executeEvent(String name, HashMap<String, Object> variables){
-        List<Interpreter> callback = Tums.register.registry.events.get(name.toUpperCase());
-        for (Interpreter executor : callback){
-            Interpreter exec  = executor.clone();
-            exec.tokenManager.changeTokensParent(exec);
-            exec.data.vars.putAll(variables);
-            executor.compile();
-        }
-    }
+
 
     public static boolean hasField(Object obj, String fieldName) {
         Class<?> cls = obj.getClass();

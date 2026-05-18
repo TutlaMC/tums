@@ -32,7 +32,7 @@ public class Tums implements ModInitializer {
         });*/
 
         resolveTumsDir();
-        runAllScripts(scriptsDir);
+        TumsAPI.runAllScripts(scriptsDir, TumsAPI.getGlobalTusan());
     }
 
     public void resolveTumsDir(){
@@ -43,27 +43,7 @@ public class Tums implements ModInitializer {
         }
     }
 
-    public void runAllScripts(Path scriptsDir){
-        try (Stream<Path> stream = Files.list(scriptsDir)) {
-                stream.filter(Files::isRegularFile)
-                    .forEach(this::runScript);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void runScript(Path script){
-        Interpreter interpreter = new Interpreter(tusan);
-        interpreter.setup(null,null,null, script);
-
-        try{
-            interpreter.compile(); // where every script in the dir gets executed
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        register.add(interpreter.data); // why are we doing this?
-    }
 
 
     public static Tusan getTusan(){

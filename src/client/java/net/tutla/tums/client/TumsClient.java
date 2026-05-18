@@ -8,6 +8,7 @@ import net.minecraft.server.dialog.action.ActionTypes;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.tutla.tums.Tums;
+import net.tutla.tums.TumsAPI;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.tums.objects.TumsEntity;
@@ -63,7 +64,7 @@ public class TumsClient implements ClientModInitializer {
                     variables.put("event_player", new TumsPlayer("event_player", null));
                     variables.put("event_entity", new TumsEntity("event_entity", target));
                 }
-                Utils.executeEvent("attack", variables);
+                TumsAPI.executeEvent("attack", variables);
             }
             return InteractionResult.PASS;
         });
