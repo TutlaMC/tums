@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.tutla.tums.Tums;
 import net.tutla.tums.TumsAPI;
 import net.tutla.tums.tusan.Utils;
+import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.tums.objects.TumsEntity;
 import net.tutla.tums.tusan.tums.objects.TumsPlayer;
@@ -56,7 +57,7 @@ public class TumsClient implements ClientModInitializer {
 
         AttackEntityCallback.EVENT.register((player, world, hand, target, hitResult) -> {
             if (world.isClientSide()) {
-                HashMap<String, Object> variables = new HashMap<>();
+                HashMap<String, Variable> variables = new HashMap<>();
                 if (target instanceof Player otherPlayer) {
                     variables.put("event_player", new TumsPlayer("event_player", otherPlayer));
                     variables.put("event_entity", new TumsEntity("event_entity", target));

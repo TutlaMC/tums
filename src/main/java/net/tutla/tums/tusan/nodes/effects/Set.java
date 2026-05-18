@@ -53,13 +53,13 @@ public class Set extends Node {
             Object val = new Expression(ctx).create().value;
             if (val instanceof Variable){
                 ((Variable) val).name = n.name;
-                n.location.put(n.name, val);
-                interpreter.data.vars.put("it",val);
-                interpreter.data.vars.put("this", val);
+                n.location.put(n.name, new Variable(n.name, val, null));
+                interpreter.data.vars.put("it",new Variable("it", val, null));
+                interpreter.data.vars.put("this", new Variable("this", val, null));
             } else {
                 n.location.put(n.name, new Variable(n.name, val, null));
-                interpreter.data.vars.put("it",val);
-                interpreter.data.vars.put("this", val);
+                interpreter.data.vars.put("it",new Variable("it", val, null));
+                interpreter.data.vars.put("this", new Variable("this", val, null));
             }
         }
         return this;

@@ -1,6 +1,7 @@
 package net.tutla.tums.tusan.nodes.base.loops;
 
 import net.tutla.tums.tusan.TusanContext;
+import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
@@ -46,21 +47,21 @@ public class Loop extends Node {
 
         if (times instanceof Integer){
             for (int i = 0; i <= ((int) times); i++) {
-                loopExecute(i);
+                loopExecute(new Variable(as, i, null));
             }
         } else {
             if (times instanceof Iterable) {
                 for (Object i : (Iterable<?>) times) {
-                    loopExecute(i);
+                    loopExecute(new Variable(as, i, null));
                 }
             } else if (times instanceof Object[]) {
                 for (Object i : (Object[]) times) {
-                    loopExecute(i);
+                    loopExecute(new Variable(as, i, null));
                 }
             } else if (times instanceof String){
                 for (int i = 0; i < ((String) times).length(); i++) {
                     char c = ((String) times).charAt(i);
-                    loopExecute(c);
+                    loopExecute(new Variable(as, i, null));
                 }
             }else {
                 interpreter.error("TusanError", "Tusan does not support this iterable", null);
@@ -68,7 +69,7 @@ public class Loop extends Node {
         }
     }
 
-    public void loopExecute(Object value){
+    public void loopExecute(Variable value){
         interpreter.data.vars.put(as, value);
         interpreter.pos = pos;
         boolean endBlock = false;

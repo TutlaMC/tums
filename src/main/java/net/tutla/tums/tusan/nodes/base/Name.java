@@ -10,12 +10,12 @@ import java.util.Map;
 public class Name extends Node {
     public static String name;
     public Object value;
-    public Map<String, Object> location = interpreter.data.vars;
+    public Map<String, Variable> location = interpreter.data.vars;
     public Name(TusanContext ctx){
         super(ctx);
     }
 
-    public Name create() {
+    public Name create() { // fuck ass logic made me take 1 hour to understand
         name = token.value;
         if (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.PROPERTY) {
             location = ((Variable) location.get(name)).properties;

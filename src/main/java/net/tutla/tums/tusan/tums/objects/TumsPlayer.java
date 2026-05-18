@@ -16,21 +16,21 @@ public class TumsPlayer extends Variable {
 
     public void setProps(){
         if (main != null){
-            properties.put("display_name", main.getDisplayName());
-            properties.put("uuid", main.getUUID());
+            updateProperty("display_name", main.getDisplayName());
+            updateProperty("uuid", main.getUUID());
 
             // Health & Inventory
-            properties.put("health", main.getHealth());
+            updateProperty("health", main.getHealth());
 
             // Position
-            properties.put("x", main.getX());
-            properties.put("y", main.getY());
-            properties.put("z", main.getY());
+            updateProperty("x", main.getX());
+            updateProperty("y", main.getY());
+            updateProperty("z", main.getY());
 
-            properties.put("yaw", main.getYRot());
-            properties.put("pitch", main.getXRot());
+            updateProperty("yaw", main.getYRot());
+            updateProperty("pitch", main.getXRot());
 
-            properties.put("javaclass", main);
+            updateProperty("javaclass", main);
         }
 
     }

@@ -1,5 +1,6 @@
 package net.tutla.tums;
 
+import net.tutla.tums.tusan.Variable;
 import net.tutla.tums.tusan.interpreter.Interpreter;
 import net.tutla.tums.tusan.lang.Tusan;
 
@@ -46,7 +47,7 @@ public class TumsAPI {
         getRegister().add(interpreter.data); // why are we doing this?
     }
 
-    public static void executeEvent(String name, HashMap<String, Object> variables){
+    public static void executeEvent(String name, HashMap<String, Variable> variables){
         List<Interpreter> callback = Tums.getRegister().registry.events.get(name.toUpperCase());
         for (Interpreter executor : callback){
             Interpreter exec  = executor.clone();

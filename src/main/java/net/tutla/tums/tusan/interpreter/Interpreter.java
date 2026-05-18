@@ -78,12 +78,12 @@ public class Interpreter {
         pos = 0;
         currentToken = tokenManager.get(pos);
 
-        /* for (Token t : tokenManager.getAll()){
+        for (Token t : tokenManager.getAll()){
             System.out.print(t.type);
             System.out.print(":");
             System.out.print(t.value);
             System.out.print("\n");
-        } */
+        }
 
         TusanContext ctx = new TusanContext(this);
         tusan.compile(ctx);

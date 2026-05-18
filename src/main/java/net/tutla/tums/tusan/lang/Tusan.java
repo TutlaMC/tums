@@ -24,11 +24,14 @@ public class Tusan {
 
     private final Token2NodeMap statementNodeMap = new Token2NodeMap();
 
-    private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of(
+    private static final List<LexerRule> DEFAULT_LEXER_RULES = List.of( // ORDER MATTERS!
+            new LexerRule(PrebuiltTusanTokenType.PROPERTY, "'s(?!['\"])"),
             new LexerRule(PrebuiltTusanTokenType.STRING, "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'"),
             new LexerRule(PrebuiltTusanTokenType.NUMBER, "\\d+(\\.\\d+)?"),
             new LexerRule(PrebuiltTusanTokenType.BOOL, WordedPattern.makeWordedPattern(List.of("true", "false")) ),
             new LexerRule(PrebuiltTusanTokenType.NOTHING, WordedPattern.makeOneWordPattern("nothing")),
+
+
 
             new LexerRule(PrebuiltTusanTokenType.OPERATOR, "[+\\-*/%]"),
             new LexerRule(PrebuiltTusanTokenType.LOGIC, "(?:\\b(?:and|or|not|contains|in)\\b|\\|\\||&&)"),

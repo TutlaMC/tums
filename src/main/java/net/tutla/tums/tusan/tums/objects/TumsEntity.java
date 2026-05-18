@@ -15,18 +15,18 @@ public class TumsEntity extends Variable {
     }
 
     public void setProps(){
-        properties.put("name", Objects.requireNonNull(main.getDisplayName()).getString());
-        properties.put("nametag", main.getCustomName());
+        updateProperty("name", Objects.requireNonNull(main.getDisplayName()).getString());
+        updateProperty("nametag", main.getCustomName());
 
         // Health & Inventory
 
         // Position
-        properties.put("x", main.getX());
-        properties.put("y", main.getY());
-        properties.put("z", main.getY());
-        properties.put("yaw", main.getYRot());
-        properties.put("pitch", main.getXRot());
+        updateProperty("x", main.getX());
+        updateProperty("y", main.getY());
+        updateProperty("z", main.getY());
+        updateProperty("yaw", main.getYRot());
+        updateProperty("pitch", main.getXRot());
 
-        properties.put("javaclass", main);
+        updateProperty("javaclass", main);
     }
 }

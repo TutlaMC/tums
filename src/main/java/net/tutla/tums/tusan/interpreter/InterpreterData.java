@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InterpreterData {
-    public final HashMap<String, Object> vars;
+    public final HashMap<String, Variable> vars;
     public final HashMap<String, FunctionRegistry> funcs;
     public final HashMap<String, Variable> local;
     public final List<Runnable> asyncTasks;
     public final HashMap<String, List<Interpreter>> events;
 
-    public InterpreterData(HashMap<String, Object> vars, HashMap<String, FunctionRegistry> funcs, HashMap<String, Variable> local, List<Runnable> asyncTasks) {
+    public InterpreterData(HashMap<String, Variable> vars, HashMap<String, FunctionRegistry> funcs, HashMap<String, Variable> local, List<Runnable> asyncTasks) {
         this.vars = vars != null ? vars : new HashMap<>();
         this.funcs = funcs != null ? funcs : new HashMap<>();
         this.local = local != null ? local : new HashMap<>();
