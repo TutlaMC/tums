@@ -6,7 +6,7 @@ import net.tutla.tums.tusan.Types;
 import net.tutla.tums.tusan.Utils;
 import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
-import net.tutla.tums.tusan.nodes.Effect;
+import net.tutla.tums.tusan.nodes.base.Effect;
 import net.tutla.tums.tusan.nodes.base.Name;
 import net.tutla.tums.tusan.nodes.base.function.ExecuteFunction;
 

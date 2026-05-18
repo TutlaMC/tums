@@ -1,10 +1,9 @@
-package net.tutla.tums.tusan.nodes;
+package net.tutla.tums.tusan.nodes.base;
 
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenGroup;
 import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.lexer.util.prebuilt.PrebuiltTusanTokenType;
-import net.tutla.tums.tusan.nodes.base.Return;
 import net.tutla.tums.tusan.nodes.expression.Expression;
 
 import java.util.Arrays;

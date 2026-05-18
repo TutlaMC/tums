@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FunctionNode extends Node { // named this way to avoid any conflicts
-    String name = token.value;
+    private String name;
     public List<FunctionParameter> parameters = new ArrayList<>();
     public Interpreter functionInterpreter = new Interpreter(ctx.getTusan());
 
@@ -25,7 +25,7 @@ public class FunctionNode extends Node { // named this way to avoid any conflict
 
     public FunctionNode create(){
         Boolean paramChecks = false; // checking optional parameters
-
+        name = interpreter.currentToken.value;
         interpreter.tokenManager.expectTokenType(PrebuiltTusanTokenType.LEFT_PAR);
         while (interpreter.tokenManager.getNextToken().type == PrebuiltTusanTokenType.IDENTIFIER){
             String parameterName = interpreter.tokenManager.nextToken().value;

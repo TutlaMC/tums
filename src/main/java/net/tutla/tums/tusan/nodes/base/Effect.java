@@ -1,8 +1,7 @@
-package net.tutla.tums.tusan.nodes;
+package net.tutla.tums.tusan.nodes.base;
 
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
-import net.tutla.tums.tusan.lexer.Token;
 import net.tutla.tums.tusan.nodes.effects.Print;
 import net.tutla.tums.tusan.nodes.effects.Set;
 

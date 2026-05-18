@@ -22,6 +22,7 @@ public class TumsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> { // minecraft why did u make me take 2 hours to figure ts out
             if (!mouseCallbackSet && client.getWindow() != null) {
                 long handle = client.getWindow().handle();

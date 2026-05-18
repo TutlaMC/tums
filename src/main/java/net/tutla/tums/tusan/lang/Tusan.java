@@ -7,13 +7,13 @@ import net.tutla.tums.tusan.node.Node;
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.lexer.*;
 import net.tutla.tums.tusan.node.Token2NodeMap;
-import net.tutla.tums.tusan.nodes.Statement;
+import net.tutla.tums.tusan.nodes.base.Statement;
 import net.tutla.tums.tusan.nodes.base.If;
 import net.tutla.tums.tusan.nodes.base.Return;
 import net.tutla.tums.tusan.nodes.base.function.FunctionNode;
 import net.tutla.tums.tusan.nodes.base.loops.Loop;
 import net.tutla.tums.tusan.nodes.base.loops.While;
-import net.tutla.tums.tusan.nodes.tums.On;
+import net.tutla.tums.tums.nodes.On;
 
 import java.util.ArrayList;
 import java.util.List;

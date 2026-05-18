@@ -1,4 +1,4 @@
-package net.tutla.tums.tusan.nodes.tums;
+package net.tutla.tums.tums.nodes;
 
 import net.tutla.tums.tusan.TusanContext;
 import net.tutla.tums.tusan.node.Node;
